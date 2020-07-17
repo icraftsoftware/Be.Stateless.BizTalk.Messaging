@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <RootNamespace>Be.Stateless.BizTalk</RootNamespace>
+    <AssemblyTitle>Be.Stateless.BizTalk.Messaging.Tests</AssemblyTitle>
+    <Description>Unit tests for BizTalk Factory's pipeline-centric messaging class library for general purpose BizTalk Server development.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Be.Stateless.BizTalk.Schemas" Version="2.0.20198.42589" />
+    <PackageReference Include="Be.Stateless.BizTalk.Unit" Version="2.0.20199.39928" />
+    <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.msbuild" Version="2.9.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+    <PackageReference Include="Moq" Version="4.13.1" />
+    <PackageReference Include="xunit.core" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Be.Stateless.BizTalk.Messaging\Be.Stateless.BizTalk.Messaging.csproj" />
+  </ItemGroup>
+
+</Project>
