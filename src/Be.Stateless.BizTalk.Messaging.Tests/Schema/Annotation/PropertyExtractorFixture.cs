@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,38 +27,38 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[Fact]
 		public void Equality()
 		{
-			new PropertyExtractor(new XmlQualifiedName("prop", "urn"), ExtractionMode.Clear)
-				.Should().Be(new PropertyExtractor(new XmlQualifiedName("prop", "urn"), ExtractionMode.Clear));
+			new PropertyExtractor(new("prop", "urn"), ExtractionMode.Clear)
+				.Should().Be(new PropertyExtractor(new("prop", "urn"), ExtractionMode.Clear));
 		}
 
 		[Fact]
 		public void InequalityOfExtractionMode()
 		{
-			new PropertyExtractor(new XmlQualifiedName("prop", "urn"), ExtractionMode.Clear)
-				.Should().NotBe(new PropertyExtractor(new XmlQualifiedName("prop", "urn"), ExtractionMode.Ignore));
+			new PropertyExtractor(new("prop", "urn"), ExtractionMode.Clear)
+				.Should().NotBe(new PropertyExtractor(new("prop", "urn"), ExtractionMode.Ignore));
 		}
 
 		[Fact]
 		public void InequalityOfProperty()
 		{
-			new PropertyExtractor(new XmlQualifiedName("prop", "urn"), ExtractionMode.Clear)
-				.Should().NotBe(new PropertyExtractor(new XmlQualifiedName("prop2", "urn"), ExtractionMode.Clear));
+			new PropertyExtractor(new("prop", "urn"), ExtractionMode.Clear)
+				.Should().NotBe(new PropertyExtractor(new("prop2", "urn"), ExtractionMode.Clear));
 		}
 
 		[Fact]
 		public void InequalityOfType()
 		{
-			new PropertyExtractor(new XmlQualifiedName("prop", "urn"), ExtractionMode.Clear)
+			new PropertyExtractor(new("prop", "urn"), ExtractionMode.Clear)
 				.Should().NotBe(new ConstantExtractor(new XmlQualifiedName("prop", "urn"), "value", ExtractionMode.Clear));
 
 			new ConstantExtractor(new XmlQualifiedName("prop", "urn"), "value", ExtractionMode.Clear)
-				.Should().NotBe(new PropertyExtractor(new XmlQualifiedName("prop", "urn"), ExtractionMode.Clear));
+				.Should().NotBe(new PropertyExtractor(new("prop", "urn"), ExtractionMode.Clear));
 
-			new PropertyExtractor(new XmlQualifiedName("prop", "urn"), ExtractionMode.Clear)
+			new PropertyExtractor(new("prop", "urn"), ExtractionMode.Clear)
 				.Should().NotBe(new XPathExtractor(new XmlQualifiedName("prop", "urn"), "*/node", ExtractionMode.Clear));
 
 			new XPathExtractor(new XmlQualifiedName("prop", "urn"), "*/node", ExtractionMode.Clear)
-				.Should().NotBe(new PropertyExtractor(new XmlQualifiedName("prop", "urn"), ExtractionMode.Clear));
+				.Should().NotBe(new PropertyExtractor(new("prop", "urn"), ExtractionMode.Clear));
 		}
 	}
 }

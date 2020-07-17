@@ -19,7 +19,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.XLANGs.BaseTypes;
 
-namespace Be.Stateless.BizTalk.Resources.Schema
+namespace Be.Stateless.BizTalk.Dummies.Schema
 {
 	[Schema(@"urn:schemas.stateless.be:biztalk:any:2020:02", @"Root")]
 	[SchemaRoots(new[] { @"Root" })]
@@ -42,7 +42,7 @@ namespace Be.Stateless.BizTalk.Resources.Schema
        <xs:appinfo>
          <b:recordInfo body_xpath=""/*[local-name()='Root' and namespace-uri()='urn:schemas.stateless.be:biztalk:any:2020:02']"" />
          <san:Properties xmlns:bf='urn:schemas.stateless.be:biztalk:properties:system:2012:04'>
-           <bf:CorrelationId xpath=""/*[local-name()='Root']//*[local-name()='Id']"" />
+           <bf:MapTypeName xpath=""/*[local-name()='Root']//*[local-name()='Id']"" />
          </san:Properties>
        </xs:appinfo>
      </xs:annotation>

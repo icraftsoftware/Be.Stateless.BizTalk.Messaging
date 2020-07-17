@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		public static PropertyExtractorCollection Deserialize(string xml)
 		{
 			if (xml.IsNullOrEmpty()) return PropertyExtractorCollection.Empty;
-			using (var reader = XmlReader.Create(new StringReader(xml), new XmlReaderSettings { IgnoreWhitespace = true, IgnoreComments = true }))
+			using (var reader = XmlReader.Create(new StringReader(xml), new() { IgnoreWhitespace = true, IgnoreComments = true }))
 			{
 				var collection = new PropertyExtractorCollection();
 				collection.ReadXml(reader);
@@ -70,11 +70,12 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		/// </returns>
 		/// <seealso cref="Deserialize"/>
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API.")]
+		[SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
 		public static string Serialize(PropertyExtractorCollection extractors)
 		{
 			if (extractors == null || !extractors.Any()) return null;
 			using (var stringWriter = new StringWriter())
-			using (var writer = XmlWriter.Create(stringWriter, new XmlWriterSettings { OmitXmlDeclaration = true }))
+			using (var writer = XmlWriter.Create(stringWriter, new() { OmitXmlDeclaration = true }))
 			{
 				extractors.WriteXml(writer);
 				writer.Flush();

@@ -19,7 +19,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.XLANGs.BaseTypes;
 
-namespace Be.Stateless.BizTalk.Resources.Schema
+namespace Be.Stateless.BizTalk.Dummies.Schema
 {
 	[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 	[SchemaType(SchemaTypeEnum.Document)]

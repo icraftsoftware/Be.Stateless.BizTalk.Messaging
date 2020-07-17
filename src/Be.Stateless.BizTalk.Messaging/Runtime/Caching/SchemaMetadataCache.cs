@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 
 using System;
 using Be.Stateless.BizTalk.Schema;
+using Be.Stateless.Runtime.Caching;
 using Microsoft.XLANGs.BaseTypes;
 
 namespace Be.Stateless.BizTalk.Runtime.Caching
@@ -32,7 +33,7 @@ namespace Be.Stateless.BizTalk.Runtime.Caching
 		/// <summary>
 		/// Singleton <see cref="SchemaMetadataCache"/> instance.
 		/// </summary>
-		public static SchemaMetadataCache Instance { get; } = new SchemaMetadataCache();
+		public static SchemaMetadataCache Instance { get; } = new();
 
 		/// <summary>
 		/// Create the singleton <see cref="SchemaMetadataCache"/> instance.

@@ -1,6 +1,6 @@
-#region Copyright & License
+ï»¿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright Â© 2012 - 2021 FranÃ§ois Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -79,17 +79,16 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 
 			#endregion
 
-			internal static readonly EmptyPropertyExtractorCollection Instance = new EmptyPropertyExtractorCollection();
+			internal static readonly EmptyPropertyExtractorCollection Instance = new();
 		}
 
 		#endregion
 
 		#region Operators
 
-		[SuppressMessage("Usage", "CA2225:Operator overloads have named alternates")]
 		public static implicit operator PropertyExtractorCollection(PropertyExtractor[] extractors)
 		{
-			return new PropertyExtractorCollection(extractors);
+			return new(extractors);
 		}
 
 		#endregion
@@ -257,11 +256,11 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		{
 			var list = new List<PropertyExtractor>();
 			reader.MoveToContent();
-			reader.AssertStartElement("Properties", SchemaAnnotationCollection.NAMESPACE);
+			reader.AssertStartElement("Properties", SchemaAnnotation.NAMESPACE);
 			Precedence = reader.HasAttribute("precedence")
 				? reader.GetAttribute("precedence").IfNotNull(v => v.Parse<ExtractorPrecedence>())
 				: default;
-			reader.ReadStartElement("Properties", SchemaAnnotationCollection.NAMESPACE);
+			reader.ReadStartElement("Properties", SchemaAnnotation.NAMESPACE);
 			while (reader.NodeType == XmlNodeType.Element)
 			{
 				var name = new XmlQualifiedName(reader.LocalName, reader.NamespaceURI);
@@ -301,7 +300,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			}
 			if (!reader.EOF)
 			{
-				reader.AssertEndElement("Properties", SchemaAnnotationCollection.NAMESPACE);
+				reader.AssertEndElement("Properties", SchemaAnnotation.NAMESPACE);
 				reader.ReadEndElement();
 			}
 			Extractors = list.ToArray();
@@ -309,13 +308,13 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 
 		private void WriteXmlProperties(XmlWriter writer)
 		{
-			writer.WriteStartElement("s0", "Properties", SchemaAnnotationCollection.NAMESPACE);
+			writer.WriteStartElement("s0", "Properties", SchemaAnnotation.NAMESPACE);
 			{
 				if (Precedence != default) writer.WriteAttributeString("precedence", Precedence.ToString().ToCamelCase());
 
 				// declare all the namespaces and their prefixes at the parent element
 				var nsCache = new XmlDictionary();
-				nsCache.Add(SchemaAnnotationCollection.NAMESPACE);
+				nsCache.Add(SchemaAnnotation.NAMESPACE);
 				Extractors.ForEach(e => nsCache.Add(e.PropertyName.Namespace));
 				for (var i = 0; nsCache.TryLookup(i, out var xds); i++)
 				{
@@ -361,7 +360,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		}
 
 		private const string MESSAGE = @"Invalid schema annotations or pipeline configuration, it must be an XML string satisfying the following grammar:
-<san:Properties [extractorPrecedence='schema|schemaOnly|pipeline|pipelineOnly'] xmlns:s0='urn0' xmlns:s1='urn1' xmlns:san='" + SchemaAnnotationCollection.NAMESPACE + @"'>
+<san:Properties [extractorPrecedence='schema|schemaOnly|pipeline|pipelineOnly'] xmlns:s0='urn0' xmlns:s1='urn1' xmlns:san='" + SchemaAnnotation.NAMESPACE + @"'>
   <s0:Property1 [mode='clear|ignore|promote|write'] value='constant' />
   <s0:Property2 [promoted='true'] value='constant' />
   <s1:Property3 [mode='clear|demote|ignore|promote|write'] xpath='*' />

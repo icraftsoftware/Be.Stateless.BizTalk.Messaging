@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,13 +27,20 @@ using Microsoft.XLANGs.BaseTypes;
 
 namespace Be.Stateless.BizTalk.Schema
 {
-	public class SchemaAnnotationReader : ISchemaAnnotationReader
+	internal class SchemaAnnotationReader : ISchemaAnnotationReader
 	{
 		#region Nested Type: EmptySchemaAnnotationReader
 
 		internal class EmptySchemaAnnotationReader : ISchemaAnnotationReader
 		{
+			internal EmptySchemaAnnotationReader(ISchemaMetadata schemaMetadata)
+			{
+				SchemaMetadata = schemaMetadata;
+			}
+
 			#region ISchemaAnnotationReader Members
+
+			public ISchemaMetadata SchemaMetadata { get; }
 
 			public XElement GetAnnotationElement(string annotationElementLocalName)
 			{
@@ -48,39 +55,37 @@ namespace Be.Stateless.BizTalk.Schema
 		internal static ISchemaAnnotationReader Create(ISchemaMetadata schemaMetadata)
 		{
 			if (schemaMetadata == null) throw new ArgumentNullException(nameof(schemaMetadata));
-			return schemaMetadata is SchemaMetadata.RootlessSchemaMetadata
-				|| schemaMetadata is SchemaMetadata.UnknownSchemaMetadata
+			return schemaMetadata is Schema.SchemaMetadata.RootlessSchemaMetadata or Schema.SchemaMetadata.UnknownSchemaMetadata
 				|| schemaMetadata.Type.Assembly.FullName.StartsWith("Microsoft.", StringComparison.Ordinal)
-					? Empty
+					? new EmptySchemaAnnotationReader(schemaMetadata)
 					: new SchemaAnnotationReader(schemaMetadata);
 		}
 
 		private SchemaAnnotationReader(ISchemaMetadata schemaMetadata)
 		{
-			_schemaMetadata = schemaMetadata;
+			SchemaMetadata = schemaMetadata;
 		}
 
 		#region ISchemaAnnotationReader Members
 
+		public ISchemaMetadata SchemaMetadata { get; }
+
 		public XElement GetAnnotationElement(string annotationElementLocalName)
 		{
-			var schema = (SchemaBase) Activator.CreateInstance(_schemaMetadata.Type);
+			var schema = (SchemaBase) Activator.CreateInstance(SchemaMetadata.Type);
 			using (var stringReader = new StringReader(schema.XmlContent))
 			{
 				var document = XDocument.Load(stringReader);
 				var namespaceManager = new XmlNamespaceManager(new NameTable());
 				namespaceManager.AddNamespace("xs", XmlSchema.Namespace);
-				namespaceManager.AddNamespace("san", SchemaAnnotationCollection.NAMESPACE);
+				namespaceManager.AddNamespace("san", SchemaAnnotation.NAMESPACE);
 				var annotationXmlElements = document.XPathSelectElements(
-					$"/*/xs:element[@name='{_schemaMetadata.RootElementName}']/xs:annotation/xs:appinfo/san:*",
+					$"/*/xs:element[@name='{SchemaMetadata.RootElementName}']/xs:annotation/xs:appinfo/san:*",
 					namespaceManager);
 				return annotationXmlElements.SingleOrDefault(e => e.Name.LocalName == annotationElementLocalName);
 			}
 		}
 
 		#endregion
-
-		public static readonly ISchemaAnnotationReader Empty = new EmptySchemaAnnotationReader();
-		private readonly ISchemaMetadata _schemaMetadata;
 	}
 }

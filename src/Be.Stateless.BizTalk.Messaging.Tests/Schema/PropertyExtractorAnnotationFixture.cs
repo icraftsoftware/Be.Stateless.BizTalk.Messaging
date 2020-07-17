@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 #endregion
 
 using Be.Stateless.BizTalk.ContextProperties;
-using Be.Stateless.BizTalk.Resources.Schema;
+using Be.Stateless.BizTalk.Dummies.Schema;
 using Be.Stateless.BizTalk.Schema.Annotation;
 using Be.Stateless.BizTalk.Schema.Extensions;
 using Be.Stateless.BizTalk.Schemas.Xml;
@@ -26,14 +26,14 @@ using Xunit;
 
 namespace Be.Stateless.BizTalk.Schema
 {
-	public class ContextPropertyAnnotationFixture
+	public class PropertyExtractorAnnotationFixture
 	{
 		[Fact]
 		public void ExtractorCollectionIsEmptyForEmptySchemaAnnotationReader()
 		{
-			var sut = new ContextPropertyAnnotation();
+			var sut = new PropertyExtractorAnnotation();
 
-			sut.Build(SchemaAnnotationReader.Empty);
+			sut.Build(new SchemaAnnotationReader.EmptySchemaAnnotationReader(SchemaMetadata.For<RootedSchema>()));
 
 			sut.Extractors.Should().BeEmpty().And.BeOfType<PropertyExtractorCollection.EmptyPropertyExtractorCollection>();
 		}
@@ -41,30 +41,30 @@ namespace Be.Stateless.BizTalk.Schema
 		[Fact]
 		public void ExtractorCollectionIsEmptyForMicrosoftSoap12Schema()
 		{
-			SchemaMetadata.For<BTS.soap_envelope_1__2.Fault>().Annotations.Find<ContextPropertyAnnotation>().Extractors.Should().BeEmpty();
+			SchemaMetadata.For<BTS.soap_envelope_1__2.Fault>().Annotations.Find<PropertyExtractorAnnotation>().Extractors.Should().BeEmpty();
 		}
 
 		[Fact]
 		public void ExtractorCollectionIsEmptyWhenSchemaHasNoAnnotation()
 		{
-			SchemaMetadata.For<Envelope>().Annotations.Find<ContextPropertyAnnotation>().Extractors.Should().BeEmpty();
+			SchemaMetadata.For<Envelope>().Annotations.Find<PropertyExtractorAnnotation>().Extractors.Should().BeEmpty();
 		}
 
 		[Fact]
 		public void ExtractorCollectionIsNotEmptyWhenSchemaHasSomeAnnotations()
 		{
-			SchemaMetadata.For<RootedSchema>().Annotations.Find<ContextPropertyAnnotation>().Extractors
+			SchemaMetadata.For<RootedSchema>().Annotations.Find<PropertyExtractorAnnotation>().Extractors
 				.Should().BeEquivalentTo(
 					new PropertyExtractorCollection(
-						new XPathExtractor(BizTalkFactoryProperties.CorrelationId, "/*[local-name()='Root']//*[local-name()='Id']")
+						new XPathExtractor(BizTalkFactoryProperties.MapTypeName, "/*[local-name()='Root']//*[local-name()='Id']")
 					));
 		}
 
 		[Fact]
 		public void GetExtractorsIsAnAcceleratorExtensionMethod()
 		{
-			SchemaMetadata.For<RootedSchema>().Annotations.Find<ContextPropertyAnnotation>().Extractors
-				.Should().BeSameAs(SchemaMetadata.For<RootedSchema>().GetExtractors());
+			SchemaMetadata.For<RootedSchema>().Annotations.Find<PropertyExtractorAnnotation>().Extractors
+				.Should().BeSameAs(SchemaMetadata.For<RootedSchema>().GetPropertyExtractors());
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Be.Stateless.BizTalk.Resources.Schema;
+using Be.Stateless.BizTalk.Dummies.Schema;
 using Be.Stateless.BizTalk.Schemas.Xml;
 using FluentAssertions;
 using Microsoft.BizTalk.Component.Interop;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Schema
 {
@@ -31,15 +31,15 @@ namespace Be.Stateless.BizTalk.Schema
 	public class SchemaMetadataFixture
 	{
 		[Fact]
-		public void AnnotationsReturnsEmptySchemaAnnotationCollectionForRootlessSchemaMetadata()
+		public void AnnotationsReturnsSchemaAnnotationCollectionForForRootlessSchemaMetadata()
 		{
-			SchemaMetadata.For<RootlessSchema>().Annotations.Should().BeSameAs(SchemaAnnotationCollection.Empty);
+			SchemaMetadata.For<RootlessSchema>().Annotations.Should().BeOfType<SchemaAnnotationCollection>();
 		}
 
 		[Fact]
-		public void AnnotationsReturnsEmptySchemaAnnotationCollectionForUnknownSchemaMetadata()
+		public void AnnotationsReturnsSchemaAnnotationCollectionForForUnknownSchemaMetadata()
 		{
-			SchemaMetadata.For(typeof(string)).Annotations.Should().BeSameAs(SchemaAnnotationCollection.Empty);
+			SchemaMetadata.For(typeof(string)).Annotations.Should().BeOfType<SchemaAnnotationCollection>();
 		}
 
 		[Fact]
@@ -100,12 +100,13 @@ namespace Be.Stateless.BizTalk.Schema
 		public void ForReturnsUnknownSchemaMetadata()
 		{
 			SchemaMetadata.For(null).Should().BeOfType<SchemaMetadata.UnknownSchemaMetadata>();
+			SchemaMetadata.For(typeof(string)).Should().BeOfType<SchemaMetadata.UnknownSchemaMetadata>();
 		}
 
 		[Fact]
 		public void ForThrowsForPropertySchema()
 		{
-			Action(() => SchemaMetadata.For<Schemas.BizTalkFactory.Properties>())
+			Invoking(SchemaMetadata.For<Schemas.BizTalkFactory.Properties>)
 				.Should().Throw<ArgumentException>()
 				.WithMessage("SchemaMetadata only supports schemas qualified with a SchemaTypeAttribute whose Type is equal to Document*");
 		}

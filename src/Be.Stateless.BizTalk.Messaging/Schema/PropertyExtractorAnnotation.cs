@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,18 +17,17 @@
 #endregion
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Schema.Annotation;
 using Be.Stateless.Extensions;
 using Microsoft.BizTalk.Message.Interop;
 
 namespace Be.Stateless.BizTalk.Schema
 {
-	public class ContextPropertyAnnotation : ISchemaAnnotation<ContextPropertyAnnotation>
+	public class PropertyExtractorAnnotation : ISchemaAnnotation<PropertyExtractorAnnotation>
 	{
-		#region ISchemaAnnotation<ContextPropertyAnnotation> Members
+		#region ISchemaAnnotation<PropertyExtractorAnnotation> Members
 
-		public ContextPropertyAnnotation Build(ISchemaAnnotationReader schemaAnnotationReader)
+		public PropertyExtractorAnnotation Build(ISchemaAnnotationReader schemaAnnotationReader)
 		{
 			if (schemaAnnotationReader == null) throw new ArgumentNullException(nameof(schemaAnnotationReader));
 			Extractors = schemaAnnotationReader.GetAnnotationElement("Properties").IfNotNull(
@@ -47,7 +46,6 @@ namespace Be.Stateless.BizTalk.Schema
 		/// Collection of <see cref="PropertyExtractor"/>-derived extractors used to read, write or promote values to and from
 		/// the context properties of an <see cref="IBaseMessagePart"/>'s payload while being processed through the pipelines.
 		/// </summary>
-		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Internals visible to BizTalk.Unit")]
 		public PropertyExtractorCollection Extractors { get; internal set; }
 	}
 }

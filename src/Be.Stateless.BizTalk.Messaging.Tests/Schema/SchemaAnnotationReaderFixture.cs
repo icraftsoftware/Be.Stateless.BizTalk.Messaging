@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 #endregion
 
 using System.Xml.Linq;
-using Be.Stateless.BizTalk.Resources.Schema;
+using Be.Stateless.BizTalk.Dummies.Schema;
 using FluentAssertions;
 using Xunit;
 
@@ -52,9 +52,10 @@ namespace Be.Stateless.BizTalk.Schema
 		[Fact]
 		public void GetAnnotationElementReturnsNullForEmptySchemaAnnotationReader()
 		{
-			SchemaAnnotationReader.Empty.GetAnnotationElement(null).Should().BeNull();
-			SchemaAnnotationReader.Empty.GetAnnotationElement(string.Empty).Should().BeNull();
-			SchemaAnnotationReader.Empty.GetAnnotationElement("any").Should().BeNull();
+			var sut = SchemaAnnotationReader.Create(SchemaMetadata.Unknown);
+			sut.GetAnnotationElement(null).Should().BeNull();
+			sut.GetAnnotationElement(string.Empty).Should().BeNull();
+			sut.GetAnnotationElement("any").Should().BeNull();
 		}
 
 		[Fact]
@@ -79,6 +80,19 @@ namespace Be.Stateless.BizTalk.Schema
 		public void GetAnnotationElementReturnsXElementWhenFound()
 		{
 			SchemaAnnotationReader.Create(SchemaMetadata.For<RootedSchema>()).GetAnnotationElement("Properties").Should().NotBeNull().And.BeOfType<XElement>();
+		}
+
+		[Fact]
+		public void SchemaMetadataLoopsBackToSchemaMetadataForEmptySchemaAnnotationReader()
+		{
+			SchemaAnnotationReader.Create(SchemaMetadata.Unknown).SchemaMetadata.Should().BeSameAs(SchemaMetadata.Unknown);
+		}
+
+		[Fact]
+		public void SchemaMetadataLoopsBackToSchemaMetadataForSchemaAnnotationReader()
+		{
+			var schemaMetadata = SchemaMetadata.For<RootedSchema>();
+			SchemaAnnotationReader.Create(schemaMetadata).SchemaMetadata.Should().BeSameAs(schemaMetadata);
 		}
 	}
 }

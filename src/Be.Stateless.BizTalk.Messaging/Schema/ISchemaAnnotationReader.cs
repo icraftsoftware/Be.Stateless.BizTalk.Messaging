@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 #endregion
 
 using System.Xml.Linq;
+using Microsoft.XLANGs.BaseTypes;
 
 namespace Be.Stateless.BizTalk.Schema
 {
@@ -25,6 +26,12 @@ namespace Be.Stateless.BizTalk.Schema
 	/// </summary>
 	public interface ISchemaAnnotationReader
 	{
+		/// <summary>
+		/// The <see cref="ISchemaMetadata"/> of the <see cref="SchemaBase"/>-derived schema for which annotations are being
+		/// retrieved.
+		/// </summary>
+		ISchemaMetadata SchemaMetadata { get; }
+
 		/// <summary>
 		/// Get annotation's XML-serialized element by annotation's name.
 		/// </summary>

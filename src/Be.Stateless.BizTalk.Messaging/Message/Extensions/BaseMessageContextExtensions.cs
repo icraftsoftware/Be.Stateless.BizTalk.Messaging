@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,10 +17,7 @@
 #endregion
 
 using System;
-using System.Globalization;
 using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
 using Microsoft.BizTalk.Message.Interop;
 
 namespace Be.Stateless.BizTalk.Message.Extensions
@@ -30,32 +27,12 @@ namespace Be.Stateless.BizTalk.Message.Extensions
 		public static string ToXml(this IBaseMessageContext context)
 		{
 			if (context == null) throw new ArgumentNullException(nameof(context));
-			// cache xmlns while constructing xml info set...
-			var nsCache = new XmlDictionary();
-			var xmlDocument = new XElement(
-				"context",
-				Enumerable.Range(0, (int) context.CountProperties).Select(
+			return MessageContextSerializer.Serialize(
+				serializeProperty => Enumerable.Range(0, (int) context.CountProperties).Select(
 					i => {
 						var value = context.ReadAt(i, out var name, out var ns);
-						// give each property element a name of 'p' and store its actual name inside the 'n' attribute, which avoids
-						// the cost of the name.IsValidQName() check for each of them as the name could be an xpath expression in the
-						// case of a distinguished property
-						return name.IndexOf("password", StringComparison.OrdinalIgnoreCase) > -1
-							? null
-							: new XElement(
-								(XNamespace) nsCache.Add(ns).Value + "p",
-								new XAttribute("n", name),
-								context.IsPromoted(name, ns) ? new XAttribute("promoted", true) : null,
-								value);
+						return serializeProperty(name, ns, value, context.IsPromoted(name, ns));
 					}));
-
-			// ... and declare/alias all of them at the root element level to minimize xml string size
-			for (var i = 0; nsCache.TryLookup(i, out var xds); i++)
-			{
-				xmlDocument.Add(new XAttribute(XNamespace.Xmlns + "s" + xds.Key.ToString(CultureInfo.InvariantCulture), xds.Value));
-			}
-
-			return xmlDocument.ToString(SaveOptions.DisableFormatting);
 		}
 	}
 }

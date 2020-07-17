@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ using Microsoft.BizTalk.Message.Interop;
 
 namespace Be.Stateless.BizTalk.Message.Extensions
 {
-	public static class BaseMessagePart
+	public static class BaseMessagePartExtensions
 	{
 		/// <summary>
 		/// Replaces this <paramref name="messagePart"/>'s original data stream by another <paramref name="stream"/>.
@@ -60,8 +60,8 @@ namespace Be.Stateless.BizTalk.Message.Extensions
 		/// Pipeline's resource tracker to which to report the newly created wrapping stream.
 		/// </param>
 		/// <returns>
-		/// The new wrapping <see cref="Stream"/> if it is not the same instance as the original one. The original <see
-		/// cref="Stream"/> otherwise.
+		/// The new wrapping <see cref="System.IO.Stream"/> if it is not the same instance as the original one. The original <see
+		/// cref="System.IO.Stream"/> otherwise.
 		/// </returns>
 		public static T WrapOriginalDataStream<T>(this IBaseMessagePart messagePart, Func<System.IO.Stream, T> wrapper, IResourceTracker tracker) where T : System.IO.Stream
 		{
@@ -80,6 +80,6 @@ namespace Be.Stateless.BizTalk.Message.Extensions
 			return wrappingStream;
 		}
 
-		private static readonly ILog _logger = LogManager.GetLogger(typeof(BaseMessagePart));
+		private static readonly ILog _logger = LogManager.GetLogger(typeof(BaseMessagePartExtensions));
 	}
 }

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 #endregion
 
 using System.Diagnostics.CodeAnalysis;
-using Be.Stateless.BizTalk.Resources.Schema;
+using Be.Stateless.BizTalk.Dummies.Schema;
 using Be.Stateless.BizTalk.Schemas.Xml;
 using FluentAssertions;
 using Moq;
@@ -27,15 +27,6 @@ namespace Be.Stateless.BizTalk.Schema
 {
 	public class SchemaAnnotationCollectionFixture
 	{
-		[Fact]
-		public void FindAgainstEmptySchemaAnnotationCollectionPassesEmptySchemaAnnotationReaderToISchemaAnnotationBuild()
-		{
-			SchemaAnnotationCollection.Empty.Find<AnnotationDummy>();
-
-			AnnotationDummy.AnnotationDummySpy
-				.Verify(ads => ads.Build(It.IsAny<SchemaAnnotationReader.EmptySchemaAnnotationReader>()));
-		}
-
 		[Fact]
 		public void FindEntailsSchemaAnnotationInstanceBuildingForEachSchema()
 		{
@@ -97,7 +88,7 @@ namespace Be.Stateless.BizTalk.Schema
 
 			public AnnotationDummy()
 			{
-				AnnotationDummySpy = new Mock<ISchemaAnnotation<AnnotationDummy>>();
+				AnnotationDummySpy = new();
 				AnnotationDummySpy
 					.Setup(ads => ads.Build(It.IsAny<ISchemaAnnotationReader>()))
 					.Returns(new AnnotationDummy(true));

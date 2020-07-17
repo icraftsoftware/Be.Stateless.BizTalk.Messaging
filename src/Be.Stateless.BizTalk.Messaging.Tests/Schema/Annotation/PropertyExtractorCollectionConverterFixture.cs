@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[SuppressMessage("ReSharper", "RedundantArgumentDefaultValue")]
 		public void ConvertFrom()
 		{
-			var xml = $@"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>
+			var xml = $@"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>
   <s0:Property1 xpath='*/some-node'/>
   <s0:Property2 promoted='true' xpath='*/other-node'/>
 </san:Properties>";
@@ -52,9 +52,10 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			sut.ConvertFrom(xml)
 				.Should().BeOfType<PropertyExtractorCollection>()
 				.Which.Should().BeEquivalentTo(
-					new XPathExtractor(new XmlQualifiedName("Property1", "urn"), "*/some-node", ExtractionMode.Write),
-					new XPathExtractor(new XmlQualifiedName("Property2", "urn"), "*/other-node", ExtractionMode.Promote)
-				);
+					new[] {
+						new XPathExtractor(new XmlQualifiedName("Property1", "urn"), "*/some-node", ExtractionMode.Write),
+						new XPathExtractor(new XmlQualifiedName("Property2", "urn"), "*/other-node", ExtractionMode.Promote)
+					});
 		}
 
 		[Fact]
@@ -79,7 +80,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[SuppressMessage("ReSharper", "RedundantArgumentDefaultValue")]
 		public void ConvertTo()
 		{
-			var xml = $"<s0:Properties xmlns:s0=\"{SchemaAnnotationCollection.NAMESPACE}\" xmlns:s1=\"urn\">"
+			var xml = $"<s0:Properties xmlns:s0=\"{SchemaAnnotation.NAMESPACE}\" xmlns:s1=\"urn\">"
 				+ "<s1:Property1 xpath=\"*/some-node\" />"
 				+ "<s1:Property2 mode=\"promote\" xpath=\"*/other-node\" />"
 				+ "</s0:Properties>";

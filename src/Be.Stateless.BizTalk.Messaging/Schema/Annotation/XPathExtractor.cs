@@ -52,7 +52,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		public XPathExtractor(XmlQualifiedName propertyName, string xpathExpression, ExtractionMode extractionMode = ExtractionMode.Write)
 			: base(propertyName, extractionMode)
 		{
-			XPathExpression = new XPathExpression(xpathExpression);
+			XPathExpression = new(xpathExpression);
 		}
 
 		public XPathExtractor(IMessageContextProperty property, string xpathExpression, ExtractionMode extractionMode = ExtractionMode.Write)
@@ -102,6 +102,8 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 
 		public XPathExpression XPathExpression { get; }
 
+		[SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
+		[SuppressMessage("ReSharper", "InvertIf")]
 		public virtual void Execute(IBaseMessageContext messageContext, string originalValue, ref string newValue)
 		{
 			if (messageContext == null) throw new ArgumentNullException(nameof(messageContext));

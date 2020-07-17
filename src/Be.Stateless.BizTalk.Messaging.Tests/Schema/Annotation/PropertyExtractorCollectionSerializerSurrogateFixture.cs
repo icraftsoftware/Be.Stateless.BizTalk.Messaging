@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,14 +30,14 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		public void ReadXmlForExtractorPrecedence()
 		{
 			var xml = "<Extractors>"
-				+ $"<san:Properties precedence='schemaOnly' xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+				+ $"<san:Properties precedence='schemaOnly' xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property1 mode='clear'/>"
 				+ "</san:Properties>"
 				+ "</Extractors>";
 
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
-				var sut = new PropertyExtractorCollectionSerializerSurrogate(new PropertyExtractorCollection());
+				var sut = new PropertyExtractorCollectionSerializerSurrogate(new());
 				sut.ReadXml(reader);
 				sut.Precedence.Should().Be(ExtractorPrecedence.SchemaOnly);
 			}
@@ -46,18 +46,18 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[Fact]
 		public void WriteXmlForExtractorPrecedence()
 		{
-			var xml = $"<s0:Properties precedence=\"pipelineOnly\" xmlns:s0=\"{SchemaAnnotationCollection.NAMESPACE}\" xmlns:s1=\"urn\">"
+			var xml = $"<s0:Properties precedence=\"pipelineOnly\" xmlns:s0=\"{SchemaAnnotation.NAMESPACE}\" xmlns:s1=\"urn\">"
 				+ "<s1:Property1 xpath=\"*/some-node\" />"
 				+ "</s0:Properties>";
 
 			var builder = new StringBuilder();
-			using (var writer = XmlWriter.Create(builder, new XmlWriterSettings { OmitXmlDeclaration = true }))
+			using (var writer = XmlWriter.Create(builder, new() { OmitXmlDeclaration = true }))
 			{
 				var sut = new PropertyExtractorCollectionSerializerSurrogate(
-					new PropertyExtractorCollection(
+					new(
 						ExtractorPrecedence.PipelineOnly,
 						new XPathExtractor(new XmlQualifiedName("Property1", "urn"), "*/some-node")));
-				sut.WriteXml(writer);
+				sut.WriteXml(writer!);
 			}
 
 			builder.ToString().Should().Be(xml);

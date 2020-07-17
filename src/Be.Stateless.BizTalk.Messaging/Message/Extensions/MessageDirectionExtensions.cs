@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ namespace Be.Stateless.BizTalk.Message.Extensions
 			// confuse this code if it'd check the inbound context properties first.
 			if (!context.GetProperty(BtsProperties.OutboundTransportLocation).IsNullOrEmpty()) return MessageDirection.Outbound;
 			if (!context.GetProperty(BtsProperties.InboundTransportLocation).IsNullOrEmpty()) return MessageDirection.Inbound;
-			throw new Exception("Unable to determine message direction.");
+			throw new("Unable to determine message direction.");
 		}
 
 		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
@@ -54,7 +54,7 @@ namespace Be.Stateless.BizTalk.Message.Extensions
 		{
 			if (!context.GetProperty(ErrorReportProperties.OutboundTransportLocation).IsNullOrEmpty()) return MessageDirection.Outbound;
 			if (!context.GetProperty(ErrorReportProperties.InboundTransportLocation).IsNullOrEmpty()) return MessageDirection.Inbound;
-			throw new Exception("Unable to determine message direction.");
+			throw new("Unable to determine message direction.");
 		}
 
 		public static bool IsInbound(this MessageDirection messageDirection)

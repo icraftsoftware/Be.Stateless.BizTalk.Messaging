@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ using System.Xml;
 using FluentAssertions;
 using Microsoft.BizTalk.XPath;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Schema.Annotation
 {
@@ -44,7 +44,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			sut.Should().BeSameAs(PropertyExtractorCollection.Empty);
 			using (var reader = XmlReader.Create(new StringReader("")))
 			{
-				Action(() => sut.ReadXml(reader)).Should().Throw<NotSupportedException>();
+				Invoking(() => sut.ReadXml(reader)).Should().Throw<NotSupportedException>();
 			}
 
 			sut = new PropertyExtractor[] { new XPathExtractor(new XmlQualifiedName("Property1", "urn"), "*/some-node", ExtractionMode.Write) };
@@ -54,7 +54,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[Fact]
 		public void ReadXml()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property1 xpath='*/some-node'/>"
 				+ "<s0:Property2 promoted='true' xpath='*/other-node'/>"
 				+ "<s0:Property3 mode='write' value='constant'/>"
@@ -66,18 +66,19 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 				var sut = new PropertyExtractorCollection();
 				sut.ReadXml(reader);
 				sut.Should().BeEquivalentTo(
-					new XPathExtractor(new XmlQualifiedName("Property1", "urn"), "*/some-node", ExtractionMode.Write),
-					new XPathExtractor(new XmlQualifiedName("Property2", "urn"), "*/other-node", ExtractionMode.Promote),
-					new ConstantExtractor(new XmlQualifiedName("Property3", "urn"), "constant", ExtractionMode.Write),
-					new PropertyExtractor(new XmlQualifiedName("Property4", "urn"), ExtractionMode.Clear)
-				);
+					new[] {
+						new XPathExtractor(new XmlQualifiedName("Property1", "urn"), "*/some-node", ExtractionMode.Write),
+						new XPathExtractor(new XmlQualifiedName("Property2", "urn"), "*/other-node", ExtractionMode.Promote),
+						new ConstantExtractor(new XmlQualifiedName("Property3", "urn"), "constant", ExtractionMode.Write),
+						new PropertyExtractor(new("Property4", "urn"), ExtractionMode.Clear)
+					});
 			}
 		}
 
 		[Fact]
 		public void ReadXmlForConstantExtractor()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property1 value='constant'/>"
 				+ "</san:Properties>";
 
@@ -85,7 +86,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			{
 				var sut = new PropertyExtractorCollection();
 				sut.ReadXml(reader);
-				sut.Should().BeEquivalentTo(new ConstantExtractor(new XmlQualifiedName("Property1", "urn"), "constant", ExtractionMode.Write));
+				sut.Should().BeEquivalentTo(new[] { new ConstantExtractor(new XmlQualifiedName("Property1", "urn"), "constant", ExtractionMode.Write) });
 			}
 		}
 
@@ -93,14 +94,14 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[SuppressMessage("ReSharper", "AccessToDisposedClosure")]
 		public void ReadXmlForConstantExtractorThrowsWhenModeAttributeIsInvalid()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property1 mode='demote' value='constant'/>"
 				+ "</san:Properties>";
 
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader)).Should().Throw<ArgumentException>().WithMessage("ExtractionMode 'Demote' is not supported by ConstantExtractor.*");
+				Invoking(() => sut.ReadXml(reader)).Should().Throw<ArgumentException>().WithMessage("ExtractionMode 'Demote' is not supported by ConstantExtractor.*");
 			}
 		}
 
@@ -108,21 +109,21 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[SuppressMessage("ReSharper", "AccessToDisposedClosure")]
 		public void ReadXmlForConstantExtractorThrowsWhenValueIsEmpty()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property1 value=''/>"
 				+ "</san:Properties>";
 
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader)).Should().Throw<ArgumentNullException>().Where(e => e.ParamName == "value");
+				Invoking(() => sut.ReadXml(reader)).Should().Throw<ArgumentNullException>().Where(e => e.ParamName == "value");
 			}
 		}
 
 		[Fact]
 		public void ReadXmlForConstantExtractorWithModeAttribute()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property1 mode='promote' value='constant'/>"
 				+ "</san:Properties>";
 
@@ -130,14 +131,14 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			{
 				var sut = new PropertyExtractorCollection();
 				sut.ReadXml(reader);
-				sut.Should().BeEquivalentTo(new ConstantExtractor(new XmlQualifiedName("Property1", "urn"), "constant", ExtractionMode.Promote));
+				sut.Should().BeEquivalentTo(new[] { new ConstantExtractor(new XmlQualifiedName("Property1", "urn"), "constant", ExtractionMode.Promote) });
 			}
 		}
 
 		[Fact]
 		public void ReadXmlForConstantExtractorWithPromotedAttribute()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property1 promoted='true' value='constant'/>"
 				+ "</san:Properties>";
 
@@ -145,14 +146,14 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			{
 				var sut = new PropertyExtractorCollection();
 				sut.ReadXml(reader);
-				sut.Should().BeEquivalentTo(new ConstantExtractor(new XmlQualifiedName("Property1", "urn"), "constant", ExtractionMode.Promote));
+				sut.Should().BeEquivalentTo(new[] { new ConstantExtractor(new XmlQualifiedName("Property1", "urn"), "constant", ExtractionMode.Promote) });
 			}
 		}
 
 		[Fact]
 		public void ReadXmlForExtractorPrecedence()
 		{
-			var xml = $"<san:Properties precedence='schemaOnly' xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties precedence='schemaOnly' xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property1 mode='clear'/>"
 				+ "</san:Properties>";
 
@@ -167,7 +168,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[Fact]
 		public void ReadXmlForPropertyExtractor()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property1 mode='clear'/>"
 				+ "</san:Properties>";
 
@@ -175,7 +176,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			{
 				var sut = new PropertyExtractorCollection();
 				sut.ReadXml(reader);
-				sut.Should().BeEquivalentTo(new PropertyExtractor(new XmlQualifiedName("Property1", "urn"), ExtractionMode.Clear));
+				sut.Should().BeEquivalentTo(new[] { new PropertyExtractor(new("Property1", "urn"), ExtractionMode.Clear) });
 			}
 		}
 
@@ -183,14 +184,14 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[SuppressMessage("ReSharper", "AccessToDisposedClosure")]
 		public void ReadXmlForPropertyExtractorThrowsWhenModeAttributeIsInvalid()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property1 mode='promote'/>"
 				+ "</san:Properties>";
 
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ArgumentException>()
 					.WithMessage("Invalid ExtractionMode, only Clear and Ignore are supported for PropertyExtractor without a Value or an XPath.*");
 			}
@@ -200,14 +201,14 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[SuppressMessage("ReSharper", "AccessToDisposedClosure")]
 		public void ReadXmlForPropertyExtractorThrowsWhenModeAttributeIsMissing()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property1/>"
 				+ "</san:Properties>";
 
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ConfigurationErrorsException>().WithMessage("ExtractionMode is missing for PropertyExtractor without a Value or an XPath.*");
 			}
 		}
@@ -216,14 +217,14 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[SuppressMessage("ReSharper", "AccessToDisposedClosure")]
 		public void ReadXmlForPropertyExtractorThrowsWhenPromotedAttributeIsPresent()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property1 promoted='true'/>"
 				+ "</san:Properties>";
 
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ConfigurationErrorsException>().WithMessage("ExtractionMode is missing for PropertyExtractor without a Value or an XPath.*");
 			}
 		}
@@ -231,7 +232,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[Fact]
 		public void ReadXmlForQNameValueExtractor()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property3 mode='promote' qnameValue='localName' xpath='*/extra-node'/>"
 				+ "</san:Properties>";
 
@@ -240,18 +241,20 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 				var sut = new PropertyExtractorCollection();
 				sut.ReadXml(reader);
 				sut.Should().BeEquivalentTo(
-					new QNameValueExtractor(
-						new XmlQualifiedName("Property3", "urn"),
-						"*/extra-node",
-						ExtractionMode.Promote,
-						QNameValueExtractionMode.LocalName));
+					new[] {
+						new QNameValueExtractor(
+							new XmlQualifiedName("Property3", "urn"),
+							"*/extra-node",
+							ExtractionMode.Promote,
+							QNameValueExtractionMode.LocalName)
+					});
 			}
 		}
 
 		[Fact]
 		public void ReadXmlForQNameValueExtractorFallsBackOnXPathExtractorWhenQNameValueExtractionModeIsDefault()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property3 mode='promote' qnameValue='name' xpath='*/extra-node'/>"
 				+ "</san:Properties>";
 
@@ -259,14 +262,14 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			{
 				var sut = new PropertyExtractorCollection();
 				sut.ReadXml(reader);
-				sut.Should().BeEquivalentTo(new XPathExtractor(new XmlQualifiedName("Property3", "urn"), "*/extra-node", ExtractionMode.Promote));
+				sut.Should().BeEquivalentTo(new[] { new XPathExtractor(new XmlQualifiedName("Property3", "urn"), "*/extra-node", ExtractionMode.Promote) });
 			}
 		}
 
 		[Fact]
 		public void ReadXmlForXPathExtractor()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property1 xpath='*/some-node'/>"
 				+ "</san:Properties>";
 
@@ -274,7 +277,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			{
 				var sut = new PropertyExtractorCollection();
 				sut.ReadXml(reader);
-				sut.Should().BeEquivalentTo(new XPathExtractor(new XmlQualifiedName("Property1", "urn"), "*/some-node", ExtractionMode.Write));
+				sut.Should().BeEquivalentTo(new[] { new XPathExtractor(new XmlQualifiedName("Property1", "urn"), "*/some-node", ExtractionMode.Write) });
 			}
 		}
 
@@ -282,14 +285,14 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[SuppressMessage("ReSharper", "AccessToDisposedClosure")]
 		public void ReadXmlForXPathExtractorThrowsWhenXPathIsEmpty()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:PropertyName xpath=''/>"
 				+ "</san:Properties>";
 
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ConfigurationErrorsException>()
 					.WithInnerException<XPathException>()
 					// ReSharper disable once StringLiteralTypo
@@ -300,7 +303,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[Fact]
 		public void ReadXmlForXPathExtractorWithModeAttribute()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property3 mode='demote' xpath='*/extra-node'/>"
 				+ "</san:Properties>";
 
@@ -308,14 +311,14 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			{
 				var sut = new PropertyExtractorCollection();
 				sut.ReadXml(reader);
-				sut.Should().BeEquivalentTo(new XPathExtractor(new XmlQualifiedName("Property3", "urn"), "*/extra-node", ExtractionMode.Demote));
+				sut.Should().BeEquivalentTo(new[] { new XPathExtractor(new XmlQualifiedName("Property3", "urn"), "*/extra-node", ExtractionMode.Demote) });
 			}
 		}
 
 		[Fact]
 		public void ReadXmlForXPathExtractorWithPromotedAttribute()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:Property2 promoted='true' xpath='*/other-node'/>"
 				+ "</san:Properties>";
 
@@ -323,7 +326,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			{
 				var sut = new PropertyExtractorCollection();
 				sut.ReadXml(reader);
-				sut.Should().BeEquivalentTo(new XPathExtractor(new XmlQualifiedName("Property2", "urn"), "*/other-node", ExtractionMode.Promote));
+				sut.Should().BeEquivalentTo(new[] { new XPathExtractor(new XmlQualifiedName("Property2", "urn"), "*/other-node", ExtractionMode.Promote) });
 			}
 		}
 
@@ -335,14 +338,14 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[SuppressMessage("ReSharper", "AccessToDisposedClosure")]
 		public void ReadXmlThrowsWhenDuplicatePropertyToExtract()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<s0:PropertyName xpath='*'/><s0:PropertyName xpath='*'/>"
 				+ "</san:Properties>";
 
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ConfigurationErrorsException>()
 					.WithInnerException<XmlException>()
 					.WithMessage("The following properties are declared multiple times: [urn:PropertyName].");
@@ -357,14 +360,14 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[SuppressMessage("ReSharper", "AccessToDisposedClosure")]
 		public void ReadXmlThrowsWhenPropertyToExtractHasNoNamespace()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}'>"
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}'>"
 				+ "<PropertyName xpath='*'/>"
 				+ "</san:Properties>";
 
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ConfigurationErrorsException>()
 					.WithInnerException<XmlException>()
 					.WithMessage("The following properties are not associated with the target namespace URI of some property schema: [PropertyName].");
@@ -380,10 +383,10 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ConfigurationErrorsException>()
 					.WithInnerException<XmlException>()
-					.WithMessage($"Element 'Properties' with namespace name '{SchemaAnnotationCollection.NAMESPACE}' was not found. Line 1, position 2.");
+					.WithMessage($"Element 'Properties' with namespace name '{SchemaAnnotation.NAMESPACE}' was not found. Line 1, position 2.");
 			}
 		}
 
@@ -396,10 +399,10 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ConfigurationErrorsException>()
 					.WithInnerException<XmlException>()
-					.WithMessage($"Element 'Properties' with namespace name '{SchemaAnnotationCollection.NAMESPACE}' was not found. Line 1, position 2.");
+					.WithMessage($"Element 'Properties' with namespace name '{SchemaAnnotation.NAMESPACE}' was not found. Line 1, position 2.");
 			}
 		}
 
@@ -412,17 +415,17 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ConfigurationErrorsException>()
 					.WithInnerException<XmlException>()
-					.WithMessage($"Element 'Properties' with namespace name '{SchemaAnnotationCollection.NAMESPACE}' was not found. Line 1, position 2.");
+					.WithMessage($"Element 'Properties' with namespace name '{SchemaAnnotation.NAMESPACE}' was not found. Line 1, position 2.");
 			}
 		}
 
 		[Fact]
 		public void ReadXmlWithoutProperties()
 		{
-			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotationCollection.NAMESPACE}' />";
+			var xml = $"<san:Properties xmlns:s0='urn' xmlns:san='{SchemaAnnotation.NAMESPACE}' />";
 
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
@@ -538,8 +541,8 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		public void UnionWithPipelinePrecedenceOfSchemaAndPipelineExtractorsHavingPipelinePropertyExtractorsToBeIgnored()
 		{
 			var schemaExtractors = new PropertyExtractorCollection(
-				new PropertyExtractor(new XmlQualifiedName("prop1", "urn"), ExtractionMode.Clear),
-				new PropertyExtractor(new XmlQualifiedName("prop2", "urn"), ExtractionMode.Clear),
+				new PropertyExtractor(new("prop1", "urn"), ExtractionMode.Clear),
+				new PropertyExtractor(new("prop2", "urn"), ExtractionMode.Clear),
 				new ConstantExtractor(new XmlQualifiedName("cso-prop", "urn"), "constant", ExtractionMode.Write),
 				new XPathExtractor(new XmlQualifiedName("xso-prop", "urn"), "*/other-node", ExtractionMode.Write),
 				new ConstantExtractor(new XmlQualifiedName("c-prop", "urn"), "constant", ExtractionMode.Write),
@@ -547,8 +550,8 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 
 			var pipelineExtractors = new PropertyExtractorCollection(
 				ExtractorPrecedence.Pipeline,
-				new PropertyExtractor(new XmlQualifiedName("prop1", "urn"), ExtractionMode.Ignore),
-				new PropertyExtractor(new XmlQualifiedName("prop2", "urn"), ExtractionMode.Ignore),
+				new PropertyExtractor(new("prop1", "urn"), ExtractionMode.Ignore),
+				new PropertyExtractor(new("prop2", "urn"), ExtractionMode.Ignore),
 				new ConstantExtractor(new XmlQualifiedName("cpo-prop", "urn"), "constant", ExtractionMode.Promote),
 				new XPathExtractor(new XmlQualifiedName("xpo-prop", "urn"), "*/other-node", ExtractionMode.Promote),
 				new ConstantExtractor(new XmlQualifiedName("c-prop", "urn"), "constant", ExtractionMode.Promote),
@@ -569,8 +572,8 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		public void UnionWithPipelinePrecedenceOfSchemaAndPipelineExtractorsHavingSchemaPropertyExtractorsToBeIgnored()
 		{
 			var schemaExtractors = new PropertyExtractorCollection(
-				new PropertyExtractor(new XmlQualifiedName("prop1", "urn"), ExtractionMode.Ignore),
-				new PropertyExtractor(new XmlQualifiedName("prop2", "urn"), ExtractionMode.Ignore),
+				new PropertyExtractor(new("prop1", "urn"), ExtractionMode.Ignore),
+				new PropertyExtractor(new("prop2", "urn"), ExtractionMode.Ignore),
 				new ConstantExtractor(new XmlQualifiedName("cso-prop", "urn"), "constant", ExtractionMode.Write),
 				new XPathExtractor(new XmlQualifiedName("xso-prop", "urn"), "*/other-node", ExtractionMode.Write),
 				new ConstantExtractor(new XmlQualifiedName("c-prop", "urn"), "constant", ExtractionMode.Write),
@@ -578,8 +581,8 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 
 			var pipelineExtractors = new PropertyExtractorCollection(
 				ExtractorPrecedence.Pipeline,
-				new PropertyExtractor(new XmlQualifiedName("prop1", "urn"), ExtractionMode.Clear),
-				new PropertyExtractor(new XmlQualifiedName("prop2", "urn"), ExtractionMode.Clear),
+				new PropertyExtractor(new("prop1", "urn"), ExtractionMode.Clear),
+				new PropertyExtractor(new("prop2", "urn"), ExtractionMode.Clear),
 				new ConstantExtractor(new XmlQualifiedName("cpo-prop", "urn"), "constant", ExtractionMode.Promote),
 				new XPathExtractor(new XmlQualifiedName("xpo-prop", "urn"), "*/other-node", ExtractionMode.Promote),
 				new ConstantExtractor(new XmlQualifiedName("c-prop", "urn"), "constant", ExtractionMode.Promote),
@@ -700,8 +703,8 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		public void UnionWithSchemaPrecedenceOfSchemaAndPipelineExtractorsHavingPipelinePropertyExtractorsToBeIgnored()
 		{
 			var schemaExtractors = new PropertyExtractorCollection(
-				new PropertyExtractor(new XmlQualifiedName("prop1", "urn"), ExtractionMode.Clear),
-				new PropertyExtractor(new XmlQualifiedName("prop2", "urn"), ExtractionMode.Clear),
+				new PropertyExtractor(new("prop1", "urn"), ExtractionMode.Clear),
+				new PropertyExtractor(new("prop2", "urn"), ExtractionMode.Clear),
 				new ConstantExtractor(new XmlQualifiedName("cso-prop", "urn"), "constant", ExtractionMode.Write),
 				new XPathExtractor(new XmlQualifiedName("xso-prop", "urn"), "*/other-node", ExtractionMode.Write),
 				new ConstantExtractor(new XmlQualifiedName("c-prop", "urn"), "constant", ExtractionMode.Write),
@@ -709,8 +712,8 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 
 			var pipelineExtractors = new PropertyExtractorCollection(
 				ExtractorPrecedence.Schema,
-				new PropertyExtractor(new XmlQualifiedName("prop1", "urn"), ExtractionMode.Ignore),
-				new PropertyExtractor(new XmlQualifiedName("prop2", "urn"), ExtractionMode.Ignore),
+				new PropertyExtractor(new("prop1", "urn"), ExtractionMode.Ignore),
+				new PropertyExtractor(new("prop2", "urn"), ExtractionMode.Ignore),
 				new ConstantExtractor(new XmlQualifiedName("cpo-prop", "urn"), "constant", ExtractionMode.Promote),
 				new XPathExtractor(new XmlQualifiedName("xpo-prop", "urn"), "*/other-node", ExtractionMode.Promote),
 				new ConstantExtractor(new XmlQualifiedName("c-prop", "urn"), "constant", ExtractionMode.Promote),
@@ -729,8 +732,8 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		public void UnionWithSchemaPrecedenceOfSchemaAndPipelineExtractorsHavingSchemaPropertyExtractorsToBeIgnored()
 		{
 			var schemaExtractors = new PropertyExtractorCollection(
-				new PropertyExtractor(new XmlQualifiedName("prop1", "urn"), ExtractionMode.Ignore),
-				new PropertyExtractor(new XmlQualifiedName("prop2", "urn"), ExtractionMode.Ignore),
+				new PropertyExtractor(new("prop1", "urn"), ExtractionMode.Ignore),
+				new PropertyExtractor(new("prop2", "urn"), ExtractionMode.Ignore),
 				new ConstantExtractor(new XmlQualifiedName("cso-prop", "urn"), "constant", ExtractionMode.Write),
 				new XPathExtractor(new XmlQualifiedName("xso-prop", "urn"), "*/other-node", ExtractionMode.Write),
 				new ConstantExtractor(new XmlQualifiedName("c-prop", "urn"), "constant", ExtractionMode.Write),
@@ -738,8 +741,8 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 
 			var pipelineExtractors = new PropertyExtractorCollection(
 				ExtractorPrecedence.Schema,
-				new PropertyExtractor(new XmlQualifiedName("prop1", "urn"), ExtractionMode.Clear),
-				new PropertyExtractor(new XmlQualifiedName("prop2", "urn"), ExtractionMode.Clear),
+				new PropertyExtractor(new("prop1", "urn"), ExtractionMode.Clear),
+				new PropertyExtractor(new("prop2", "urn"), ExtractionMode.Clear),
 				new ConstantExtractor(new XmlQualifiedName("cpo-prop", "urn"), "constant", ExtractionMode.Promote),
 				new XPathExtractor(new XmlQualifiedName("xpo-prop", "urn"), "*/other-node", ExtractionMode.Promote),
 				new ConstantExtractor(new XmlQualifiedName("c-prop", "urn"), "constant", ExtractionMode.Promote),
@@ -759,16 +762,16 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[Fact]
 		public void UnionWithWhateverPrecedenceOfEmptySchemaAndEmptyPipelineExtractors()
 		{
-			PropertyExtractorCollection.Empty.Union(new PropertyExtractorCollection(ExtractorPrecedence.PipelineOnly)).Should().BeEmpty();
-			PropertyExtractorCollection.Empty.Union(new PropertyExtractorCollection(ExtractorPrecedence.Pipeline)).Should().BeEmpty();
-			PropertyExtractorCollection.Empty.Union(new PropertyExtractorCollection(ExtractorPrecedence.SchemaOnly)).Should().BeEmpty();
-			PropertyExtractorCollection.Empty.Union(new PropertyExtractorCollection(ExtractorPrecedence.Schema)).Should().BeEmpty();
+			PropertyExtractorCollection.Empty.Union(new(ExtractorPrecedence.PipelineOnly)).Should().BeEmpty();
+			PropertyExtractorCollection.Empty.Union(new(ExtractorPrecedence.Pipeline)).Should().BeEmpty();
+			PropertyExtractorCollection.Empty.Union(new(ExtractorPrecedence.SchemaOnly)).Should().BeEmpty();
+			PropertyExtractorCollection.Empty.Union(new(ExtractorPrecedence.Schema)).Should().BeEmpty();
 		}
 
 		[Fact]
 		public void WriteXml()
 		{
-			var xml = $"<s0:Properties xmlns:s0=\"{SchemaAnnotationCollection.NAMESPACE}\" xmlns:s1=\"urn\">"
+			var xml = $"<s0:Properties xmlns:s0=\"{SchemaAnnotation.NAMESPACE}\" xmlns:s1=\"urn\">"
 				+ "<s1:Property1 xpath=\"*/some-node\" />"
 				+ "<s1:Property2 mode=\"promote\" xpath=\"*/other-node\" />"
 				+ "<s1:Property3 mode=\"promote\" value=\"constant\" />"
@@ -776,14 +779,14 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 				+ "</s0:Properties>";
 
 			var builder = new StringBuilder();
-			using (var writer = XmlWriter.Create(builder, new XmlWriterSettings { OmitXmlDeclaration = true }))
+			using (var writer = XmlWriter.Create(builder, new() { OmitXmlDeclaration = true }))
 			{
 				var sut = new PropertyExtractorCollection(
 					new XPathExtractor(new XmlQualifiedName("Property1", "urn"), "*/some-node", ExtractionMode.Write),
 					new XPathExtractor(new XmlQualifiedName("Property2", "urn"), "*/other-node", ExtractionMode.Promote),
 					new ConstantExtractor(new XmlQualifiedName("Property3", "urn"), "constant", ExtractionMode.Promote),
-					new PropertyExtractor(new XmlQualifiedName("Property4", "urn"), ExtractionMode.Clear));
-				sut.WriteXml(writer);
+					new PropertyExtractor(new("Property4", "urn"), ExtractionMode.Clear));
+				sut.WriteXml(writer!);
 			}
 
 			builder.ToString().Should().Be(xml);
@@ -792,17 +795,17 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[Fact]
 		public void WriteXmlForExtractorPrecedence()
 		{
-			var xml = $"<s0:Properties precedence=\"pipelineOnly\" xmlns:s0=\"{SchemaAnnotationCollection.NAMESPACE}\" xmlns:s1=\"urn\">"
+			var xml = $"<s0:Properties precedence=\"pipelineOnly\" xmlns:s0=\"{SchemaAnnotation.NAMESPACE}\" xmlns:s1=\"urn\">"
 				+ "<s1:Property1 xpath=\"*/some-node\" />"
 				+ "</s0:Properties>";
 
 			var builder = new StringBuilder();
-			using (var writer = XmlWriter.Create(builder, new XmlWriterSettings { OmitXmlDeclaration = true }))
+			using (var writer = XmlWriter.Create(builder, new() { OmitXmlDeclaration = true }))
 			{
 				var sut = new PropertyExtractorCollection(
 					ExtractorPrecedence.PipelineOnly,
 					new XPathExtractor(new XmlQualifiedName("Property1", "urn"), "*/some-node", ExtractionMode.Write));
-				sut.WriteXml(writer);
+				sut.WriteXml(writer!);
 			}
 
 			builder.ToString().Should().Be(xml);

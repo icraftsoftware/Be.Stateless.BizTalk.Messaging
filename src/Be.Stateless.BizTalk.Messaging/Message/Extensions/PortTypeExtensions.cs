@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 #endregion
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.ContextProperties;
 using Microsoft.BizTalk.Message.Interop;
@@ -34,23 +33,23 @@ namespace Be.Stateless.BizTalk.Message.Extensions
 			if (message.IsRequestResponse()) return Message.PortType.RequestResponseReceivePort;
 			if (message.Direction().IsInbound()) return Message.PortType.OneWayReceivePort;
 			if (message.Direction().IsOutbound()) return Message.PortType.OneWaySendPort;
-			throw new Exception("Unable to determine port type.");
+			throw new("Unable to determine port type.");
 		}
 
 		public static bool IsOneWay(this PortType portType)
 		{
-			return portType == Message.PortType.OneWayReceivePort || portType == Message.PortType.OneWaySendPort;
+			return portType is Message.PortType.OneWayReceivePort or Message.PortType.OneWaySendPort;
 		}
 
 		public static bool IsTwoWay(this PortType portType)
 		{
-			return portType == Message.PortType.RequestResponseReceivePort || portType == Message.PortType.SolicitResponseSendPort;
+			return portType is Message.PortType.RequestResponseReceivePort or Message.PortType.SolicitResponseSendPort;
 		}
 
 		public static bool IsInitiatingMessageExchangePattern(this IBaseMessage message)
 		{
-			return (message.PortType().IsRequestResponse() && message.Direction().IsInbound())
-				|| (message.PortType().IsSolicitResponse() && message.Direction().IsOutbound())
+			return message.PortType().IsRequestResponse() && message.Direction().IsInbound()
+				|| message.PortType().IsSolicitResponse() && message.Direction().IsOutbound()
 				|| message.PortType().IsOneWay();
 		}
 
