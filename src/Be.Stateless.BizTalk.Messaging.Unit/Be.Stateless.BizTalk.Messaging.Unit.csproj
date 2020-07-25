@@ -4,7 +4,7 @@
     <TargetFramework>net48</TargetFramework>
     <RootNamespace>Be.Stateless.BizTalk</RootNamespace>
     <AssemblyTitle>Be.Stateless.BizTalk.Messaging.Unit</AssemblyTitle>
-    <Description>BizTalk Factory's unit test helpers for Be.Stateless.BizTalk.Messaging pipeline-centric messaging class library.</Description>
+    <Description>BizTalk Factory's pipeline-centric messaging unit test library for general purpose BizTalk Server development.</Description>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -35,6 +35,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -45,6 +49,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Be.Stateless.BizTalk.Messaging\Be.Stateless.BizTalk.Messaging.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Unit\Message\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
 </Project>

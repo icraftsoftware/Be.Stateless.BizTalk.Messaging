@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Be.Stateless.BizTalk.Messaging.Unit", "src\Be.Stateless.BizTalk.Messaging.Unit\Be.Stateless.BizTalk.Messaging.Unit.csproj", "{974A659A-E894-4C1D-9A6C-C0429E7E7B2D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Be.Stateless.BizTalk.Messaging.Unit.Tests", "src\Be.Stateless.BizTalk.Messaging.Unit.Tests\Be.Stateless.BizTalk.Messaging.Unit.Tests.csproj", "{843A738F-7262-40BE-9E94-224A973B1D96}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{974A659A-E894-4C1D-9A6C-C0429E7E7B2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{974A659A-E894-4C1D-9A6C-C0429E7E7B2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{974A659A-E894-4C1D-9A6C-C0429E7E7B2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{843A738F-7262-40BE-9E94-224A973B1D96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{843A738F-7262-40BE-9E94-224A973B1D96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{843A738F-7262-40BE-9E94-224A973B1D96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{843A738F-7262-40BE-9E94-224A973B1D96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
