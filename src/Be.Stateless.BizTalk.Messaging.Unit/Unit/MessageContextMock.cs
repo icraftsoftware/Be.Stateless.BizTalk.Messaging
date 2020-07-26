@@ -19,8 +19,8 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.BizTalk.Message.Interop;
 
-namespace Be.Stateless.BizTalk.Unit.Message
+namespace Be.Stateless.BizTalk.Unit
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public API.")]
-	public class MessageMock : Message.Mock<IBaseMessage> { }
+	public class MessageContextMock : Message.Context.Mock<IBaseMessageContext> { }
 }

@@ -20,7 +20,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Xml;
 using Be.Stateless.BizTalk.ContextProperties;
 using Be.Stateless.BizTalk.Message.Extensions;
-using Be.Stateless.BizTalk.Unit.Message;
+using Be.Stateless.BizTalk.Unit;
 using FluentAssertions;
 using Moq;
 using Xunit;

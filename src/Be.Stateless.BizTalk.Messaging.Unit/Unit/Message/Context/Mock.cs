@@ -22,13 +22,13 @@ using System.Linq.Expressions;
 using System.Xml;
 using Be.Stateless.BizTalk.ContextProperties;
 using Be.Stateless.BizTalk.Message.Extensions;
-using Be.Stateless.BizTalk.Unit.Message.Message.Language;
+using Be.Stateless.BizTalk.Unit.Message.Language;
 using Be.Stateless.Extensions;
 using Microsoft.BizTalk.Message.Interop;
 using Moq;
 using Moq.Language.Flow;
 
-namespace Be.Stateless.BizTalk.Unit.Message.Message.Context
+namespace Be.Stateless.BizTalk.Unit.Message.Context
 {
 	/// <summary>
 	/// <see cref="Mock"/> overloads to support the direct setup of the <see cref="BaseMessageContext"/>'s extension methods to

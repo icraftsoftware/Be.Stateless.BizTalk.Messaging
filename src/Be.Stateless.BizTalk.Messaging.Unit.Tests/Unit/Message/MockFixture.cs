@@ -368,7 +368,7 @@ namespace Be.Stateless.BizTalk.Unit.Message
 		public void MoqBugWhereRecursiveMockingOverwritesExplicitSetupIsAscertained()
 		{
 			var message = new Mock<IBaseMessage> { DefaultValue = DefaultValue.Empty };
-			var context = new Mock<IBaseMessageContext> { DefaultValue = DefaultValue.Empty };
+			var context = new Context.Mock<IBaseMessageContext> { DefaultValue = DefaultValue.Empty };
 
 			message.Setup(m => m.Context).Returns(context.Object);
 			message.Object.Context.Should().BeSameAs(context.Object);

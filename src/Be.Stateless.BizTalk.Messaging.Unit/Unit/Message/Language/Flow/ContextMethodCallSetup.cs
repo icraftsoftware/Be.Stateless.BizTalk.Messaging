@@ -22,244 +22,259 @@ using Moq;
 using Moq.Language;
 using Moq.Language.Flow;
 
-namespace Be.Stateless.BizTalk.Unit.Message.Message.Language.Flow
+namespace Be.Stateless.BizTalk.Unit.Message.Language.Flow
 {
-	internal class ContextMethodCallReturn<TMock> : IReturnsResult<TMock>
+	internal class ContextMethodCallSetup<TMock> : ISetup<TMock>
 		where TMock : class, IBaseMessage
 	{
-		public ContextMethodCallReturn(IReturnsResult<IBaseMessageContext> contextMethodCallReturnImplementation)
+		public ContextMethodCallSetup(ISetup<IBaseMessageContext> contextMethodCallSetupImplementation)
 		{
-			_contextMethodCallReturnImplementation = contextMethodCallReturnImplementation ?? throw new ArgumentNullException(nameof(contextMethodCallReturnImplementation));
+			_contextMethodCallSetupImplementation = contextMethodCallSetupImplementation ?? throw new ArgumentNullException(nameof(contextMethodCallSetupImplementation));
 		}
 
-		#region IReturnsResult<TMock> Members
+		#region ISetup<TMock> Members
 
 		public ICallbackResult Callback(InvocationAction action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback(System.Delegate callback)
 		{
-			return _contextMethodCallReturnImplementation.Callback(callback);
+			return _contextMethodCallSetupImplementation.Callback(callback);
 		}
 
 		public ICallbackResult Callback(Action action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback<T1>(Action<T1> action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback<T1, T2>(Action<T1, T2> action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback<T1, T2, T3>(Action<T1, T2, T3> action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback<T1, T2, T3, T4>(Action<T1, T2, T3, T4> action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback<T1, T2, T3, T4, T5>(Action<T1, T2, T3, T4, T5> action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback<T1, T2, T3, T4, T5, T6>(Action<T1, T2, T3, T4, T5, T6> action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7>(Action<T1, T2, T3, T4, T5, T6, T7> action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8>(Action<T1, T2, T3, T4, T5, T6, T7, T8> action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9> action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
 		}
 
 		public ICallbackResult Callback<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(
 			Action<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> action)
 		{
-			return _contextMethodCallReturnImplementation.Callback(action);
+			return _contextMethodCallSetupImplementation.Callback(action);
+		}
+
+		public IThrowsResult Throws(Exception exception)
+		{
+			return _contextMethodCallSetupImplementation.Throws(exception);
+		}
+
+		public IThrowsResult Throws<TException>() where TException : Exception, new()
+		{
+			return _contextMethodCallSetupImplementation.Throws<TException>();
 		}
 
 		[Obsolete("To verify this condition, use the overload to Verify that receives Times.AtMostOnce().")]
 		public IVerifies AtMostOnce()
 		{
-			return _contextMethodCallReturnImplementation.AtMostOnce();
+			return _contextMethodCallSetupImplementation.AtMostOnce();
 		}
 
 		[Obsolete("To verify this condition, use the overload to Verify that receives Times.AtMost(callCount).")]
 		public IVerifies AtMost(int callCount)
 		{
-			return _contextMethodCallReturnImplementation.AtMost(callCount);
+			return _contextMethodCallSetupImplementation.AtMost(callCount);
 		}
 
 		public void Verifiable()
 		{
-			_contextMethodCallReturnImplementation.Verifiable();
+			_contextMethodCallSetupImplementation.Verifiable();
 		}
 
 		public void Verifiable(string failMessage)
 		{
-			_contextMethodCallReturnImplementation.Verifiable(failMessage);
+			_contextMethodCallSetupImplementation.Verifiable(failMessage);
 		}
 
 		public IVerifies Raises(Action<TMock> eventExpression, EventArgs args)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, args);
 		}
 
 		public IVerifies Raises(Action<TMock> eventExpression, Func<EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
 		}
 
 		public IVerifies Raises(Action<TMock> eventExpression, params object[] args)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, args);
 		}
 
 		public IVerifies Raises<T1>(Action<TMock> eventExpression, Func<T1, EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
 		}
 
 		public IVerifies Raises<T1, T2>(Action<TMock> eventExpression, Func<T1, T2, EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
 		}
 
 		public IVerifies Raises<T1, T2, T3>(Action<TMock> eventExpression, Func<T1, T2, T3, EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
 		}
 
 		public IVerifies Raises<T1, T2, T3, T4>(Action<TMock> eventExpression, Func<T1, T2, T3, T4, EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
 		}
 
 		public IVerifies Raises<T1, T2, T3, T4, T5>(Action<TMock> eventExpression, Func<T1, T2, T3, T4, T5, EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
 		}
 
 		public IVerifies Raises<T1, T2, T3, T4, T5, T6>(Action<TMock> eventExpression, Func<T1, T2, T3, T4, T5, T6, EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
 		}
 
 		public IVerifies Raises<T1, T2, T3, T4, T5, T6, T7>(Action<TMock> eventExpression, Func<T1, T2, T3, T4, T5, T6, T7, EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
 		}
 
 		public IVerifies Raises<T1, T2, T3, T4, T5, T6, T7, T8>(Action<TMock> eventExpression, Func<T1, T2, T3, T4, T5, T6, T7, T8, EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
 		}
 
 		public IVerifies Raises<T1, T2, T3, T4, T5, T6, T7, T8, T9>(Action<TMock> eventExpression, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
 		}
 
 		public IVerifies Raises<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Action<TMock> eventExpression, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
 		}
 
 		public IVerifies Raises<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(Action<TMock> eventExpression, Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
 		}
 
 		public IVerifies Raises<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
 			Action<TMock> eventExpression,
 			Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
 		}
 
 		public IVerifies Raises<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(
 			Action<TMock> eventExpression,
 			Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
 		}
 
 		public IVerifies Raises<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(
 			Action<TMock> eventExpression,
 			Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
 		}
 
 		public IVerifies Raises<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(
 			Action<TMock> eventExpression,
 			Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
 		}
 
 		public IVerifies Raises<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(
 			Action<TMock> eventExpression,
 			Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, EventArgs> func)
 		{
-			throw new NotImplementedException();
+			return _contextMethodCallSetupImplementation.Raises((Action<IBaseMessageContext>) eventExpression, func);
+		}
+
+		public ICallBaseResult CallBase()
+		{
+			return _contextMethodCallSetupImplementation.CallBase();
 		}
 
 		#endregion
 
-		private readonly IReturnsResult<IBaseMessageContext> _contextMethodCallReturnImplementation;
+		private readonly ISetup<IBaseMessageContext> _contextMethodCallSetupImplementation;
 	}
 }

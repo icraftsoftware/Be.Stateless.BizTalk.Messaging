@@ -21,7 +21,7 @@ using System.IO;
 using Be.Stateless.BizTalk.ContextProperties;
 using Be.Stateless.BizTalk.Message.Extensions;
 using Be.Stateless.BizTalk.Stream;
-using Be.Stateless.BizTalk.Unit.Message;
+using Be.Stateless.BizTalk.Unit;
 using Be.Stateless.IO;
 using Be.Stateless.IO.Extensions;
 using FluentAssertions;

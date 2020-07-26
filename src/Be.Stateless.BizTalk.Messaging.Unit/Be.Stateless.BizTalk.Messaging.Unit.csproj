@@ -52,11 +52,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Unit\Message\" />
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
+    <Folder Include="Unit\Message\Message\" />
   </ItemGroup>
 
 </Project>

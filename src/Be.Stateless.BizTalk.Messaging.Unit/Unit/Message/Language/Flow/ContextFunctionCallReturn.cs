@@ -21,7 +21,7 @@ using Microsoft.BizTalk.Message.Interop;
 using Moq;
 using Moq.Language.Flow;
 
-namespace Be.Stateless.BizTalk.Unit.Message.Message.Language.Flow
+namespace Be.Stateless.BizTalk.Unit.Message.Language.Flow
 {
 	internal class ContextFunctionCallReturn<TMock, TResult> : IReturnsThrows<TMock, TResult>
 		where TMock : class, IBaseMessage

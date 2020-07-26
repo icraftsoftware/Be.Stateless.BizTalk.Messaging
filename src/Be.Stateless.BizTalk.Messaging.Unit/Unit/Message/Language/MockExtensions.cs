@@ -16,11 +16,19 @@
 
 #endregion
 
-using System.Diagnostics.CodeAnalysis;
+using Be.Stateless.BizTalk.Unit.Message.Language.Flow;
 using Microsoft.BizTalk.Message.Interop;
+using Moq.Language.Flow;
 
-namespace Be.Stateless.BizTalk.Unit.Message
+namespace Be.Stateless.BizTalk.Unit.Message.Language
 {
-	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public API.")]
-	public class MessageContextMock : Message.Context.Mock<IBaseMessageContext> { }
+	internal static class MockExtensions
+	{
+		internal static ISetup<TMock, string> SetupContextReadPropertyString<TMock>(this Moq.Mock<TMock> mock, string name, string @namespace)
+			where TMock : class, IBaseMessageContext
+		{
+			var setup = mock.Setup(context => context.Read(name, @namespace));
+			return new ContextStringPropertyReadSetupPhraseAdapter<TMock>(setup);
+		}
+	}
 }
