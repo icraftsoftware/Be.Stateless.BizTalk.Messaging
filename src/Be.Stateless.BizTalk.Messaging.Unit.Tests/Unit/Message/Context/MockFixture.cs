@@ -24,7 +24,7 @@ using FluentAssertions;
 using Microsoft.BizTalk.Message.Interop;
 using Moq;
 using Xunit;
-using static Be.Stateless.BizTalk.DelegateFactory;
+using static Be.Stateless.DelegateFactory;
 
 namespace Be.Stateless.BizTalk.Unit.Message.Context
 {

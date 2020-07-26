@@ -18,7 +18,8 @@
 
 using System;
 
-namespace Be.Stateless.BizTalk
+// ReSharper disable once CheckNamespace
+namespace Be.Stateless
 {
 	public static class DelegateFactory
 	{

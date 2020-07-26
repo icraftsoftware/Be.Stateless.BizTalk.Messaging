@@ -19,7 +19,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Xml;
 using Be.Stateless.BizTalk.ContextProperties;
-using Be.Stateless.BizTalk.Unit;
+using Be.Stateless.BizTalk.Unit.Message;
 using FluentAssertions;
 using Xunit;
 using static Be.Stateless.DelegateFactory;

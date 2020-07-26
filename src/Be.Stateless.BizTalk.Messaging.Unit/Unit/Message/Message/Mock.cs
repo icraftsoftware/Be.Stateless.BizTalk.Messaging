@@ -44,6 +44,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Message
 	/// <seealso cref="BaseMessage.SetProperty{T,TV}(IBaseMessage,MessageContextProperty{T,TV},TV)"/>
 	/// <seealso cref="BaseMessage.Promote{T}(IBaseMessage,MessageContextProperty{T,string},string)"/>
 	/// <seealso cref="BaseMessage.Promote{T,TV}(IBaseMessage,MessageContextProperty{T,TV},TV)"/>
+	[SuppressMessage("Design", "CA1062:Validate arguments of public methods")]
 	[SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
 	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
 	public class Mock<TMock> : Moq.Mock<TMock> where TMock : class, IBaseMessage

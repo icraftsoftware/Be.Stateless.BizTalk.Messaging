@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <PackageReference Include="Be.Stateless.BizTalk.Schemas" Version="2.0.20198.42589" />
-    <PackageReference Include="Be.Stateless.BizTalk.Unit" Version="2.0.20199.39928" />
     <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -29,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Be.Stateless.BizTalk.Messaging.Unit\Be.Stateless.BizTalk.Messaging.Unit.csproj" />
     <ProjectReference Include="..\Be.Stateless.BizTalk.Messaging\Be.Stateless.BizTalk.Messaging.csproj" />
   </ItemGroup>
 
