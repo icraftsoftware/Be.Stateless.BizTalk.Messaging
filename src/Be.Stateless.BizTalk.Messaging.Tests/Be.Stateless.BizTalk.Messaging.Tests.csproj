@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Be.Stateless.BizTalk.Schemas" Version="2.0.20198.42589" />
-    <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.2">
+    <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
