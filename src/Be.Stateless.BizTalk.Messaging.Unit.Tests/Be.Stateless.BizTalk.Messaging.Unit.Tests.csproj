@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <RootNamespace>Be.Stateless.BizTalk</RootNamespace>
-    <AssemblyTitle>Be.Stateless.BizTalk.Messaging.Tests</AssemblyTitle>
+    <AssemblyTitle>Be.Stateless.BizTalk.Messaging.Unit.Tests</AssemblyTitle>
     <Description>Unit tests for BizTalk Factory's pipeline-centric messaging unit test library for general purpose BizTalk Server development.</Description>
   </PropertyGroup>
 
