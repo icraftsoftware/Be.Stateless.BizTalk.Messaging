@@ -33,7 +33,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void AnyFunctionCanBeUsedToSetupExtensionMethod()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.GetProperty(BtsProperties.AckRequired)).Returns(true);
 			context.Setup(c => c.GetProperty(BtsProperties.ActualRetryCount)).Returns(10);
 			context.Setup(c => c.GetProperty(BtsProperties.SendPortName)).Returns("send-port-name");
@@ -49,7 +49,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void AnyPredicateCanBeUsedToSetupPromoteExtensionMethod()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.Promote(BtsProperties.AckRequired, It.Is<bool>(b => b)));
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount, It.Is<int>(i => i % 2 == 0)));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName, It.Is<string>(s => s.IsQName())));
@@ -62,7 +62,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void AnyPredicateCanBeUsedToSetupSetPropertyExtensionMethod()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.SetProperty(BtsProperties.AckRequired, It.Is<bool>(b => !b)));
 			context.Setup(c => c.SetProperty(BtsProperties.ActualRetryCount, It.Is<int>(i => i % 2 != 0)));
 			context.Setup(c => c.SetProperty(BtsProperties.SendPortName, It.Is<string>(s => !s.IsQName())));
@@ -75,7 +75,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void AnyValueCanBeUsedToSetupPromoteExtensionMethod()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.Promote(BtsProperties.AckRequired, It.IsAny<bool>()));
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount, It.IsAny<int>()));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName, It.IsAny<string>()));
@@ -88,7 +88,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void AnyValueCanBeUsedToSetupSetPropertyExtensionMethod()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.SetProperty(BtsProperties.AckRequired, It.IsAny<bool>()));
 			context.Setup(c => c.SetProperty(BtsProperties.ActualRetryCount, It.IsAny<int>()));
 			context.Setup(c => c.SetProperty(BtsProperties.SendPortName, It.IsAny<string>()));
@@ -101,7 +101,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void AnyValueOrPredicateCanBeUsedToVerifyPromoteExtensionMethod()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>();
+			var context = new Mock<IBaseMessageContext>();
 
 			context.Object.Promote(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10);
 			context.Object.Promote(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true);
@@ -121,7 +121,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void AnyValueOrPredicateCanBeUsedToVerifySetPropertyExtensionMethod()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>();
+			var context = new Mock<IBaseMessageContext>();
 
 			context.Object.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10);
 			context.Object.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true);
@@ -143,7 +143,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		{
 			var callbackCount = 0;
 
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.GetProperty(BtsProperties.ReceiveLocationName))
 				.Callback((string n, string ns) => callbackCount += n == BtsProperties.ReceiveLocationName.Name ? 1 : -1)
 				.Returns("receive-location-name");
@@ -162,7 +162,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void ContextPropertyValueDefaultsToNullWithoutSetupIfMockBehaviorIsLoose()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Loose);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Loose);
 
 			context.Object.GetProperty(BtsProperties.AckRequired).Should().BeNull();
 			context.Object.Read(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace).Should().BeNull();
@@ -175,7 +175,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void DeletePropertyExtensionMethodCanBeSetupByWrite()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, null));
 			context.Setup(c => c.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, null));
 			context.Setup(c => c.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, null));
@@ -188,7 +188,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void DeletePropertyExtensionMethodCanVerifyWriteSetupAndCall()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, null));
 			context.Setup(c => c.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, null));
 			context.Setup(c => c.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, null));
@@ -205,7 +205,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void DeletePropertyExtensionMethodSetupAndCall()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.DeleteProperty(BtsProperties.AckRequired));
 			context.Setup(c => c.DeleteProperty(BtsProperties.ActualRetryCount));
 			context.Setup(c => c.DeleteProperty(BtsProperties.SendPortName));
@@ -218,7 +218,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void DeletePropertyExtensionMethodSetupAndCallThroughWrite()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.DeleteProperty(BtsProperties.AckRequired));
 			context.Setup(c => c.DeleteProperty(BtsProperties.ActualRetryCount));
 			context.Setup(c => c.DeleteProperty(BtsProperties.SendPortName));
@@ -231,7 +231,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void DeletePropertyExtensionMethodSetupAndVerify()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.DeleteProperty(BtsProperties.AckRequired));
 			context.Setup(c => c.DeleteProperty(BtsProperties.ActualRetryCount));
 			context.Setup(c => c.DeleteProperty(BtsProperties.SendPortName));
@@ -248,7 +248,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void DeletePropertyExtensionMethodSetupAndVerifyThroughWrite()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.DeleteProperty(BtsProperties.AckRequired));
 			context.Setup(c => c.DeleteProperty(BtsProperties.ActualRetryCount));
 			context.Setup(c => c.DeleteProperty(BtsProperties.SendPortName));
@@ -265,7 +265,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void DeletePropertyExtensionMethodSetupAndVerifyWhenCalledThroughWrite()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.DeleteProperty(BtsProperties.AckRequired));
 			context.Setup(c => c.DeleteProperty(BtsProperties.ActualRetryCount));
 			context.Setup(c => c.DeleteProperty(BtsProperties.SendPortName));
@@ -282,7 +282,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void GetPropertyExtensionMethodCanBeSetupByRead()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.Read(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace)).Returns(true);
 			context.Setup(c => c.Read(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace)).Returns(10);
 			context.Setup(c => c.Read(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace)).Returns("send-port-name");
@@ -295,7 +295,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void GetPropertyExtensionMethodCanVerifyReadSetupAndCall()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.Read(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace)).Returns(true);
 			context.Setup(c => c.Read(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace)).Returns(10);
 			context.Setup(c => c.Read(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace)).Returns("send-port-name");
@@ -312,7 +312,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void GetPropertyExtensionMethodSetupAndCall()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.GetProperty(BtsProperties.AckRequired)).Returns(true);
 			context.Setup(c => c.GetProperty(BtsProperties.ActualRetryCount)).Returns(10);
 			context.Setup(c => c.GetProperty(BtsProperties.SendPortName)).Returns("send-port-name");
@@ -325,7 +325,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void GetPropertyExtensionMethodSetupAndCallThroughRead()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.GetProperty(BtsProperties.AckRequired)).Returns(true);
 			context.Setup(c => c.GetProperty(BtsProperties.ActualRetryCount)).Returns(10);
 			context.Setup(c => c.GetProperty(BtsProperties.SendPortName)).Returns("send-port-name");
@@ -338,7 +338,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void GetPropertyExtensionMethodSetupAndVerify()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.GetProperty(BtsProperties.AckRequired)).Returns(true);
 			context.Setup(c => c.GetProperty(BtsProperties.ActualRetryCount)).Returns(10);
 			context.Setup(c => c.GetProperty(BtsProperties.SendPortName)).Returns("send-port-name");
@@ -355,7 +355,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void GetPropertyExtensionMethodSetupAndVerifyThroughRead()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.GetProperty(BtsProperties.AckRequired)).Returns(true);
 			context.Setup(c => c.GetProperty(BtsProperties.ActualRetryCount)).Returns(10);
 			context.Setup(c => c.GetProperty(BtsProperties.SendPortName)).Returns("send-port-name");
@@ -372,7 +372,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void GetPropertyExtensionMethodSetupAndVerifyWhenCalledThroughRead()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.GetProperty(BtsProperties.AckRequired)).Returns(true);
 			context.Setup(c => c.GetProperty(BtsProperties.ActualRetryCount)).Returns(10);
 			context.Setup(c => c.GetProperty(BtsProperties.SendPortName)).Returns("send-port-name");
@@ -389,7 +389,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void IsPromotedExtensionMethodCallAndVerifyRequiresPromoteExtensionMethodSetup()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.Promote(BtsProperties.AckRequired, true));
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName, "send-port-name"));
@@ -410,7 +410,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void IsPromotedExtensionMethodCallWillFailWhenIsPromotedExtensionMethodOnlyIsSetup()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Loose); // notice behavior is loose
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Loose); // notice behavior is loose
 			context.Setup(c => c.IsPromoted(BtsProperties.AckRequired)).Returns(true);
 			context.Setup(c => c.IsPromoted(BtsProperties.ActualRetryCount)).Returns(true);
 			context.Setup(c => c.IsPromoted(BtsProperties.SendPortName)).Returns(true);
@@ -430,7 +430,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void IsPromotedExtensionMethodCannotBeSetupByCoreIsPromoted()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Loose); // notice behavior is loose
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Loose); // notice behavior is loose
 			context.Setup(c => c.IsPromoted(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace)).Returns(true);
 			context.Setup(c => c.IsPromoted(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace)).Returns(true);
 			context.Setup(c => c.IsPromoted(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace)).Returns(true);
@@ -445,7 +445,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void IsPromotedExtensionMethodCanVerifyCoreIsPromotedSetupAndCall()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.IsPromoted(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace)).Returns(true);
 			context.Setup(c => c.IsPromoted(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace)).Returns(true);
 			context.Setup(c => c.IsPromoted(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace)).Returns(true);
@@ -462,7 +462,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void IsPromotedExtensionMethodSetupAndCallThroughCoreIsPromoted()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.IsPromoted(BtsProperties.AckRequired)).Returns(true);
 			context.Setup(c => c.IsPromoted(BtsProperties.ActualRetryCount)).Returns(true);
 			context.Setup(c => c.IsPromoted(BtsProperties.SendPortName)).Returns(true);
@@ -475,7 +475,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void IsPromotedExtensionMethodSetupAndVerifyThroughCoreIsPromoted()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Loose); // notice behavior is loose
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Loose); // notice behavior is loose
 			context.Setup(c => c.IsPromoted(BtsProperties.AckRequired)).Returns(true);
 			context.Setup(c => c.IsPromoted(BtsProperties.ActualRetryCount)).Returns(true);
 			context.Setup(c => c.IsPromoted(BtsProperties.SendPortName)).Returns(true);
@@ -496,7 +496,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void IsPromotedExtensionMethodSetupAndVerifyWhenCalledThroughCoreIsPromoted()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.IsPromoted(BtsProperties.AckRequired)).Returns(true);
 			context.Setup(c => c.IsPromoted(BtsProperties.ActualRetryCount)).Returns(true);
 			context.Setup(c => c.IsPromoted(BtsProperties.SendPortName)).Returns(true);
@@ -513,7 +513,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void IsPromotedExtensionMethodVerifyWillFailWhenIsPromotedExtensionMethodOnlyIsSetup()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Loose); // notice behavior is loose
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Loose); // notice behavior is loose
 			context.Setup(c => c.IsPromoted(BtsProperties.AckRequired)).Returns(true);
 			context.Setup(c => c.IsPromoted(BtsProperties.ActualRetryCount)).Returns(true);
 			context.Setup(c => c.IsPromoted(BtsProperties.SendPortName)).Returns(true);
@@ -533,7 +533,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void PromoteExtensionMethodCanBeSetupByCorePromote()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.Promote(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true));
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name"));
@@ -546,7 +546,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void PromoteExtensionMethodCanVerifyCorePromoteSetupAndCall()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.Promote(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true));
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name"));
@@ -563,7 +563,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void PromoteExtensionMethodSetupAndCall()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.Promote(BtsProperties.AckRequired, true));
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName, "send-port-name"));
@@ -576,7 +576,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void PromoteExtensionMethodSetupAndCallThroughCorePromote()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.Promote(BtsProperties.AckRequired, true));
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName, "send-port-name"));
@@ -589,7 +589,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void PromoteExtensionMethodSetupAndVerify()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.Promote(BtsProperties.AckRequired, true));
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName, "send-port-name"));
@@ -606,7 +606,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void PromoteExtensionMethodSetupAndVerifyThroughCorePromote()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.Promote(BtsProperties.AckRequired, true));
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName, "send-port-name"));
@@ -623,7 +623,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void PromoteExtensionMethodSetupAndVerifyWhenCalledThroughCorePromote()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.Promote(BtsProperties.AckRequired, true));
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName, "send-port-name"));
@@ -640,7 +640,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void SetPropertyExtensionMethodCanBeSetupByWrite()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true));
 			context.Setup(c => c.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10));
 			context.Setup(c => c.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name"));
@@ -653,7 +653,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void SetPropertyExtensionMethodCanVerifyWriteSetupAndCall()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true));
 			context.Setup(c => c.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10));
 			context.Setup(c => c.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name"));
@@ -670,7 +670,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void SetPropertyExtensionMethodSetupAndCall()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.SetProperty(BtsProperties.AckRequired, true));
 			context.Setup(c => c.SetProperty(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.SetProperty(BtsProperties.SendPortName, "send-port-name"));
@@ -683,7 +683,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void SetPropertyExtensionMethodSetupAndCallThroughWrite()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.SetProperty(BtsProperties.AckRequired, true));
 			context.Setup(c => c.SetProperty(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.SetProperty(BtsProperties.SendPortName, "send-port-name"));
@@ -696,7 +696,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void SetPropertyExtensionMethodSetupAndVerify()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.SetProperty(BtsProperties.AckRequired, true));
 			context.Setup(c => c.SetProperty(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.SetProperty(BtsProperties.SendPortName, "send-port-name"));
@@ -713,7 +713,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void SetPropertyExtensionMethodSetupAndVerifyThroughWrite()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.SetProperty(BtsProperties.AckRequired, true));
 			context.Setup(c => c.SetProperty(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.SetProperty(BtsProperties.SendPortName, "send-port-name"));
@@ -730,7 +730,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void SetPropertyExtensionMethodSetupAndVerifyWhenCalledThroughWrite()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.SetProperty(BtsProperties.AckRequired, true));
 			context.Setup(c => c.SetProperty(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.SetProperty(BtsProperties.SendPortName, "send-port-name"));
@@ -747,7 +747,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void VerifyOfVerifiableExtensionMethodSetup()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.SetProperty(BtsProperties.AckRequired, true)).Verifiable();
 			context.Setup(c => c.SetProperty(BtsProperties.ActualRetryCount, 10)).Verifiable();
 			context.Setup(c => c.SetProperty(BtsProperties.SendPortName, "send-port-name")).Verifiable();
@@ -762,7 +762,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		[Fact]
 		public void VerifyOfVerifiableExtensionMethodSetupThrowsIfUnmatchedExpectation()
 		{
-			var context = new Message.Context.Mock<IBaseMessageContext>(MockBehavior.Strict);
+			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.GetProperty(BtsProperties.AckRequired)).Returns(true).Verifiable();
 			context.Setup(c => c.GetProperty(BtsProperties.ActualRetryCount)).Returns(It.IsAny<int?>()).Verifiable();
 			context.Setup(c => c.GetProperty(BtsProperties.SendPortName)).Returns("send-port-name").Verifiable();
