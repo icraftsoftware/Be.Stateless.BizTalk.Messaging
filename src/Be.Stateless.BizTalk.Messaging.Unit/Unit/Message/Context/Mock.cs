@@ -88,6 +88,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			}
 		}
 
+		[SuppressMessage("ReSharper", "InvertIf")]
 		public ISetup<TMock, string> Setup(Expression<Func<IBaseMessageContext, string>> expression)
 		{
 			// intercept setup
@@ -102,6 +103,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			return Setup((Expression<Func<TMock, string>>) (Expression) expression);
 		}
 
+		[SuppressMessage("ReSharper", "InvertIf")]
 		public ISetup<TMock, bool> Setup(Expression<Func<IBaseMessageContext, bool>> expression)
 		{
 			// intercept setup
@@ -116,6 +118,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			return Setup((Expression<Func<TMock, bool>>) (Expression) expression);
 		}
 
+		[SuppressMessage("ReSharper", "InvertIf")]
 		public ISetup<TMock, object> Setup<TResult>(Expression<Func<IBaseMessageContext, TResult?>> expression) where TResult : struct
 		{
 			// intercept setup
@@ -213,9 +216,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 		}
 
 		private static readonly Expression<Action<TMock>> _promoteExpressionTemplate =
-			context => context.Promote(BizTalkFactoryProperties.EnvironmentTag.Name, BizTalkFactoryProperties.EnvironmentTag.Namespace, null);
+			context => context.Promote(BizTalkFactoryProperties.MapTypeName.Name, BizTalkFactoryProperties.MapTypeName.Namespace, null);
 
 		private static readonly Expression<Action<TMock>> _writeExpressionTemplate =
-			context => context.Write(BizTalkFactoryProperties.EnvironmentTag.Name, BizTalkFactoryProperties.EnvironmentTag.Namespace, null);
+			context => context.Write(BizTalkFactoryProperties.MapTypeName.Name, BizTalkFactoryProperties.MapTypeName.Namespace, null);
 	}
 }

@@ -26,7 +26,7 @@ using System.Xml;
 using FluentAssertions;
 using Microsoft.BizTalk.XPath;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static Be.Stateless.Unit.DelegateFactory;
 
 namespace Be.Stateless.BizTalk.Schema.Annotation
 {
@@ -783,7 +783,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 					new XPathExtractor(new XmlQualifiedName("Property2", "urn"), "*/other-node", ExtractionMode.Promote),
 					new ConstantExtractor(new XmlQualifiedName("Property3", "urn"), "constant", ExtractionMode.Promote),
 					new PropertyExtractor(new XmlQualifiedName("Property4", "urn"), ExtractionMode.Clear));
-				sut.WriteXml(writer);
+				sut.WriteXml(writer!);
 			}
 
 			builder.ToString().Should().Be(xml);
@@ -802,7 +802,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 				var sut = new PropertyExtractorCollection(
 					ExtractorPrecedence.PipelineOnly,
 					new XPathExtractor(new XmlQualifiedName("Property1", "urn"), "*/some-node", ExtractionMode.Write));
-				sut.WriteXml(writer);
+				sut.WriteXml(writer!);
 			}
 
 			builder.ToString().Should().Be(xml);

@@ -97,6 +97,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		}
 
 		[SuppressMessage("ReSharper", "MemberCanBeProtected.Global", Justification = "Public API.")]
+		[SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
 		public virtual void Execute(IBaseMessageContext messageContext)
 		{
 			if (messageContext == null) throw new ArgumentNullException(nameof(messageContext));

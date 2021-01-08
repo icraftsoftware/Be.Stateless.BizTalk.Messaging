@@ -17,7 +17,7 @@
 #endregion
 
 using System.Diagnostics.CodeAnalysis;
-using Be.Stateless.BizTalk.Resources.Schema;
+using Be.Stateless.BizTalk.Dummies.Schema;
 using Be.Stateless.BizTalk.Schemas.Xml;
 using FluentAssertions;
 using Moq;

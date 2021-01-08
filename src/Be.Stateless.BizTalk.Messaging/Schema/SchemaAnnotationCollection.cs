@@ -48,9 +48,7 @@ namespace Be.Stateless.BizTalk.Schema
 	///     <xs:annotation>
 	///       <xs:appinfo>
 	///         ...
-	///         <san:EnvelopeMapSpecName>
-	///           Be.Stateless.BizTalk.Unit.Transform.IdentityTransform, Be.Stateless.BizTalk.Unit, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3707daa0b119fc14
-	///         </san:EnvelopeMapSpecName>
+	///         <san:EnvelopeMapSpecName>Be.Stateless.BizTalk.Transform.Identity, Be.Stateless.BizTalk.Transform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3707daa0b119fc14</san:EnvelopeMapSpecName>
 	///         <san:Properties xmlns:tp='urn:schemas.stateless.be:biztalk:properties:tracking:2012:04'>
 	///           <tp:Value1 xpath="/*[local-name()='Root']/*[local-name()='Message']/*[local-name()='Id']" />
 	///         </san:Properties>

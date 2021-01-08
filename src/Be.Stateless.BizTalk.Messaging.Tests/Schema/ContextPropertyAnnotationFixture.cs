@@ -17,7 +17,7 @@
 #endregion
 
 using Be.Stateless.BizTalk.ContextProperties;
-using Be.Stateless.BizTalk.Resources.Schema;
+using Be.Stateless.BizTalk.Dummies.Schema;
 using Be.Stateless.BizTalk.Schema.Annotation;
 using Be.Stateless.BizTalk.Schema.Extensions;
 using Be.Stateless.BizTalk.Schemas.Xml;
@@ -56,7 +56,7 @@ namespace Be.Stateless.BizTalk.Schema
 			SchemaMetadata.For<RootedSchema>().Annotations.Find<ContextPropertyAnnotation>().Extractors
 				.Should().BeEquivalentTo(
 					new PropertyExtractorCollection(
-						new XPathExtractor(BizTalkFactoryProperties.CorrelationId, "/*[local-name()='Root']//*[local-name()='Id']")
+						new XPathExtractor(BizTalkFactoryProperties.MapTypeName, "/*[local-name()='Root']//*[local-name()='Id']")
 					));
 		}
 

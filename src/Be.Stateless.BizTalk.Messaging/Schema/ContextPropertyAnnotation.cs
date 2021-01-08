@@ -17,7 +17,6 @@
 #endregion
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using Be.Stateless.BizTalk.Schema.Annotation;
 using Be.Stateless.Extensions;
 using Microsoft.BizTalk.Message.Interop;
@@ -47,7 +46,6 @@ namespace Be.Stateless.BizTalk.Schema
 		/// Collection of <see cref="PropertyExtractor"/>-derived extractors used to read, write or promote values to and from
 		/// the context properties of an <see cref="IBaseMessagePart"/>'s payload while being processed through the pipelines.
 		/// </summary>
-		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Internals visible to BizTalk.Unit")]
 		public PropertyExtractorCollection Extractors { get; internal set; }
 	}
 }

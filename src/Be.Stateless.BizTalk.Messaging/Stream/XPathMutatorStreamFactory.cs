@@ -24,12 +24,12 @@ using Microsoft.BizTalk.Streaming;
 
 namespace Be.Stateless.BizTalk.Stream
 {
-#pragma warning disable 1584,1711,1572,1581,1580
+#pragma warning disable 1574
 	/// <summary>
 	/// <see cref="XPathMutatorStream"/> that goes along with <see cref="Be.Stateless.BizTalk.MicroComponent.ContextPropertyExtractor"/>
 	/// and <see cref="Component.ContextPropertyExtractorComponent"/>.
 	/// </summary>
-#pragma warning restore 1584,1711,1572,1581,1580
+#pragma warning restore 1574
 	public static class XPathMutatorStreamFactory
 	{
 		public static XPathMutatorStream Create(System.IO.Stream stream, IEnumerable<XPathExtractor> extractors, Func<IBaseMessageContext> messageContextAccessor)

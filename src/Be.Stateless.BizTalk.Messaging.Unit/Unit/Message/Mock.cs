@@ -76,6 +76,7 @@ namespace Be.Stateless.BizTalk.Unit.Message
 			return Setup((Expression<Action<TMock>>) (Expression) expression);
 		}
 
+		[SuppressMessage("ReSharper", "InvertIf")]
 		public ISetup<TMock, string> Setup(Expression<Func<IBaseMessage, string>> expression)
 		{
 			// intercept setup
@@ -90,6 +91,7 @@ namespace Be.Stateless.BizTalk.Unit.Message
 			return Setup((Expression<Func<TMock, string>>) (Expression) expression);
 		}
 
+		[SuppressMessage("ReSharper", "InvertIf")]
 		public ISetup<TMock, bool> Setup(Expression<Func<IBaseMessage, bool>> expression)
 		{
 			// intercept setup
@@ -104,6 +106,7 @@ namespace Be.Stateless.BizTalk.Unit.Message
 			return Setup((Expression<Func<TMock, bool>>) (Expression) expression);
 		}
 
+		[SuppressMessage("ReSharper", "InvertIf")]
 		public ISetup<TMock, object> Setup<TResult>(Expression<Func<IBaseMessage, TResult?>> expression) where TResult : struct
 		{
 			// intercept and rewrite IBaseMessage setup against IBaseMessageContext

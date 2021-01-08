@@ -22,7 +22,7 @@ using Be.Stateless.BizTalk.ContextProperties;
 using Be.Stateless.BizTalk.Unit;
 using FluentAssertions;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static Be.Stateless.Unit.DelegateFactory;
 
 namespace Be.Stateless.BizTalk.Schema.Annotation
 {
@@ -33,7 +33,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		public void DemoteDoesNotThrowIfNewValueIsNullOrEmpty()
 		{
 			var messageMock = new MessageMock();
-			var sut = new XPathExtractor(BizTalkFactoryProperties.CorrelationId.QName, "//value1", ExtractionMode.Demote);
+			var sut = new XPathExtractor(BizTalkFactoryProperties.MapTypeName.QName, "//value1", ExtractionMode.Demote);
 			string newValue = null;
 			Action(() => sut.Execute(messageMock.Object.Context, "old", ref newValue)).Should().NotThrow();
 			newValue.Should().BeNull();

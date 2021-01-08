@@ -23,7 +23,7 @@ using Microsoft.BizTalk.Message.Interop;
 
 namespace Be.Stateless.BizTalk.Message.Extensions
 {
-	public static class BaseMessagePart
+	public static class BaseMessagePartExtensions
 	{
 		/// <summary>
 		/// Replaces this <paramref name="messagePart"/>'s original data stream by another <paramref name="stream"/>.
@@ -80,6 +80,6 @@ namespace Be.Stateless.BizTalk.Message.Extensions
 			return wrappingStream;
 		}
 
-		private static readonly ILog _logger = LogManager.GetLogger(typeof(BaseMessagePart));
+		private static readonly ILog _logger = LogManager.GetLogger(typeof(BaseMessagePartExtensions));
 	}
 }

@@ -18,12 +18,12 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Be.Stateless.BizTalk.Resources.Schema;
+using Be.Stateless.BizTalk.Dummies.Schema;
 using Be.Stateless.BizTalk.Schemas.Xml;
 using FluentAssertions;
 using Microsoft.BizTalk.Component.Interop;
 using Xunit;
-using static Be.Stateless.DelegateFactory;
+using static Be.Stateless.Unit.DelegateFactory;
 
 namespace Be.Stateless.BizTalk.Schema
 {

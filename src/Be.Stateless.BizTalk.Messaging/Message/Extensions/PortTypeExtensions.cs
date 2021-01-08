@@ -49,8 +49,8 @@ namespace Be.Stateless.BizTalk.Message.Extensions
 
 		public static bool IsInitiatingMessageExchangePattern(this IBaseMessage message)
 		{
-			return (message.PortType().IsRequestResponse() && message.Direction().IsInbound())
-				|| (message.PortType().IsSolicitResponse() && message.Direction().IsOutbound())
+			return message.PortType().IsRequestResponse() && message.Direction().IsInbound()
+				|| message.PortType().IsSolicitResponse() && message.Direction().IsOutbound()
 				|| message.PortType().IsOneWay();
 		}
 

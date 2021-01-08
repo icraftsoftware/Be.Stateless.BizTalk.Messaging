@@ -57,7 +57,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 					new PropertyExtractorCollection(
 						ExtractorPrecedence.PipelineOnly,
 						new XPathExtractor(new XmlQualifiedName("Property1", "urn"), "*/some-node")));
-				sut.WriteXml(writer);
+				sut.WriteXml(writer!);
 			}
 
 			builder.ToString().Should().Be(xml);

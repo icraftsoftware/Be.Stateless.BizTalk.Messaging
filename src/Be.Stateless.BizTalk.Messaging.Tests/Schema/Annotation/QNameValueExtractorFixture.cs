@@ -41,13 +41,13 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		public void ExecuteDemotesLocalNameValueInContext()
 		{
 			var messageContextMock = new MessageContextMock();
-			messageContextMock.Setup(c => c.GetProperty(BizTalkFactoryProperties.ReceiverName)).Returns("new-value");
+			messageContextMock.Setup(c => c.GetProperty(BizTalkFactoryProperties.OutboundTransportLocation)).Returns("new-value");
 			var newValue = string.Empty;
 
-			var sut = new QNameValueExtractor(BizTalkFactoryProperties.ReceiverName.QName, "/letter/*/to", ExtractionMode.Demote, QNameValueExtractionMode.LocalName);
+			var sut = new QNameValueExtractor(BizTalkFactoryProperties.OutboundTransportLocation.QName, "/letter/*/to", ExtractionMode.Demote, QNameValueExtractionMode.LocalName);
 			sut.Execute(messageContextMock.Object, "value", ref newValue);
 
-			messageContextMock.Verify(c => c.Promote(BizTalkFactoryProperties.ReceiverName, It.IsAny<string>()), Times.Never);
+			messageContextMock.Verify(c => c.Promote(BizTalkFactoryProperties.OutboundTransportLocation, It.IsAny<string>()), Times.Never);
 			newValue.Should().Be("new-value");
 		}
 
@@ -55,13 +55,13 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		public void ExecuteDemotesLocalNameValueInContextAndKeepOriginalPrefix()
 		{
 			var messageContextMock = new MessageContextMock();
-			messageContextMock.Setup(c => c.GetProperty(BizTalkFactoryProperties.ReceiverName)).Returns("new-value");
+			messageContextMock.Setup(c => c.GetProperty(BizTalkFactoryProperties.OutboundTransportLocation)).Returns("new-value");
 			var newValue = string.Empty;
 
-			var sut = new QNameValueExtractor(BizTalkFactoryProperties.ReceiverName.QName, "/letter/*/to", ExtractionMode.Demote, QNameValueExtractionMode.LocalName);
+			var sut = new QNameValueExtractor(BizTalkFactoryProperties.OutboundTransportLocation.QName, "/letter/*/to", ExtractionMode.Demote, QNameValueExtractionMode.LocalName);
 			sut.Execute(messageContextMock.Object, "ns:value", ref newValue);
 
-			messageContextMock.Verify(c => c.Promote(BizTalkFactoryProperties.ReceiverName, It.IsAny<string>()), Times.Never);
+			messageContextMock.Verify(c => c.Promote(BizTalkFactoryProperties.OutboundTransportLocation, It.IsAny<string>()), Times.Never);
 			newValue.Should().Be("ns:new-value");
 		}
 
@@ -71,10 +71,10 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			var messageContextMock = new MessageContextMock();
 			var newValue = string.Empty;
 
-			var sut = new QNameValueExtractor(BizTalkFactoryProperties.ReceiverName.QName, "/letter/*/to", ExtractionMode.Promote, QNameValueExtractionMode.LocalName);
+			var sut = new QNameValueExtractor(BizTalkFactoryProperties.OutboundTransportLocation.QName, "/letter/*/to", ExtractionMode.Promote, QNameValueExtractionMode.LocalName);
 			sut.Execute(messageContextMock.Object, "ns:value", ref newValue);
 
-			messageContextMock.Verify(c => c.Promote(BizTalkFactoryProperties.ReceiverName, "value"));
+			messageContextMock.Verify(c => c.Promote(BizTalkFactoryProperties.OutboundTransportLocation, "value"));
 			newValue.Should().BeEmpty();
 		}
 

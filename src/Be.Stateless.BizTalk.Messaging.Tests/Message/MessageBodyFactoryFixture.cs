@@ -25,36 +25,36 @@ using Xunit;
 
 namespace Be.Stateless.BizTalk.Message
 {
-	public class MessageFactoryFixture
+	public class MessageBodyFactoryFixture
 	{
 		[Fact]
-		public void CreatingMessageBySchemaTypeNeverThrows()
+		public void CreatingMessageBodyBySchemaTypeNeverThrows()
 		{
-			Action act = () => MessageFactory.CreateMessage<soap_envelope_1__2.Envelope>();
+			Action act = () => MessageBodyFactory.Create<soap_envelope_1__2.Envelope>();
 			act.Should().NotThrow();
 		}
 
 		[Fact]
 		[SuppressMessage("ReSharper", "StringLiteralTypo")]
-		public void CreatingMessageForNonSchemaTypeThrows()
+		public void CreatingMessageBodyForNonSchemaTypeThrows()
 		{
-			Action act = () => MessageFactory.CreateMessage(typeof(int));
+			Action act = () => MessageBodyFactory.Create(typeof(int));
 			act.Should().Throw<ArgumentException>().WithMessage("System.Int32 does not derive from Microsoft.XLANGs.BaseTypes.SchemaBase.*");
 		}
 
 		[Fact]
-		public void CreatingMessageWithInvalidContentThrows()
+		public void CreatingMessageBodyWithInvalidContentThrows()
 		{
-			var content = MessageFactory.CreateMessage<soap_envelope_1__1.Envelope>().OuterXml;
-			Action act = () => MessageFactory.CreateMessage<soap_envelope_1__2.Envelope>(content);
+			var content = MessageBodyFactory.Create<soap_envelope_1__1.Envelope>().OuterXml;
+			Action act = () => MessageBodyFactory.Create<soap_envelope_1__2.Envelope>(content);
 			act.Should().Throw<XmlSchemaValidationException>();
 		}
 
 		[Fact]
-		public void CreatingMessageWithValidContentDoesNotThrow()
+		public void CreatingMessageBodyWithValidContentDoesNotThrow()
 		{
-			var content = MessageFactory.CreateMessage<soap_envelope_1__2.Envelope>().OuterXml;
-			Action act = () => MessageFactory.CreateMessage<soap_envelope_1__2.Envelope>(content);
+			var content = MessageBodyFactory.Create<soap_envelope_1__2.Envelope>().OuterXml;
+			Action act = () => MessageBodyFactory.Create<soap_envelope_1__2.Envelope>(content);
 			act.Should().NotThrow();
 		}
 	}

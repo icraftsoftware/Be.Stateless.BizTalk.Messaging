@@ -37,8 +37,8 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		public void Match()
 		{
 			var extractors = new[] {
-				new XPathExtractor(BizTalkFactoryProperties.SenderName.QName, "/letter/*/from", ExtractionMode.Promote),
-				new XPathExtractor(BizTalkFactoryProperties.ReceiverName.QName, "/letter/*/to", ExtractionMode.Promote),
+				new XPathExtractor(BizTalkFactoryProperties.ContextBuilderTypeName.QName, "/letter/*/from", ExtractionMode.Promote),
+				new XPathExtractor(BizTalkFactoryProperties.OutboundTransportLocation.QName, "/letter/*/to", ExtractionMode.Promote),
 				new XPathExtractor(SBMessagingProperties.ContentType.QName, "/letter/*/subject", ExtractionMode.Write),
 				new XPathExtractor(SBMessagingProperties.CorrelationId.QName, "/letter/*/paragraph", ExtractionMode.Write),
 				new XPathExtractor(SBMessagingProperties.Label.QName, "/letter/*/salutations", ExtractionMode.Write),
@@ -50,8 +50,8 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 				stream.Drain();
 			}
 
-			MessageContextMock.Verify(c => c.Promote(BizTalkFactoryProperties.SenderName, "info@world.com"));
-			MessageContextMock.Verify(c => c.Promote(BizTalkFactoryProperties.ReceiverName, "francois.chabot@gmail.com"));
+			MessageContextMock.Verify(c => c.Promote(BizTalkFactoryProperties.ContextBuilderTypeName, "info@world.com"));
+			MessageContextMock.Verify(c => c.Promote(BizTalkFactoryProperties.OutboundTransportLocation, "francois.chabot@gmail.com"));
 			MessageContextMock.Verify(c => c.SetProperty(SBMessagingProperties.ContentType, "inquiry"));
 			MessageContextMock.Verify(c => c.SetProperty(SBMessagingProperties.CorrelationId, "paragraph-one"));
 			MessageContextMock.Verify(c => c.SetProperty(SBMessagingProperties.Label, "King regards,"));
@@ -62,15 +62,15 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		public void MatchAndDemote()
 		{
 			var extractors = new[] {
-				new XPathExtractor(BizTalkFactoryProperties.SenderName.QName, "/letter/*/paragraph[1]", ExtractionMode.Demote),
-				new XPathExtractor(BizTalkFactoryProperties.SenderName.QName, "/letter/*/paragraph[2]", ExtractionMode.Demote),
-				new XPathExtractor(BizTalkFactoryProperties.SenderName.QName, "/letter/*/paragraph[3]", ExtractionMode.Demote)
+				new XPathExtractor(BizTalkFactoryProperties.ContextBuilderTypeName.QName, "/letter/*/paragraph[1]", ExtractionMode.Demote),
+				new XPathExtractor(BizTalkFactoryProperties.ContextBuilderTypeName.QName, "/letter/*/paragraph[2]", ExtractionMode.Demote),
+				new XPathExtractor(BizTalkFactoryProperties.ContextBuilderTypeName.QName, "/letter/*/paragraph[3]", ExtractionMode.Demote)
 			};
 
 			using (var stream = XPathMutatorStreamFactory.Create(new StringStream(UNQUALIFIED_LETTER), extractors, () => MessageContextMock.Object))
 			using (var reader = new StreamReader(stream))
 			{
-				MessageContextMock.Setup(c => c.GetProperty(BizTalkFactoryProperties.SenderName)).Returns("same-paragraph");
+				MessageContextMock.Setup(c => c.GetProperty(BizTalkFactoryProperties.ContextBuilderTypeName)).Returns("same-paragraph");
 				reader.ReadToEnd()
 					.Should().Be(
 						UNQUALIFIED_LETTER
@@ -85,9 +85,9 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		public void MatchForGroup()
 		{
 			var extractors = new[] {
-				new XPathExtractor(BizTalkFactoryProperties.SenderName.QName, "/letter/*/paragraph", ExtractionMode.Write),
-				new XPathExtractor(BizTalkFactoryProperties.ReceiverName.QName, "/letter/*/paragraph", ExtractionMode.Write),
-				new XPathExtractor(BizTalkFactoryProperties.EnvironmentTag.QName, "/letter/*/paragraph", ExtractionMode.Write)
+				new XPathExtractor(BizTalkFactoryProperties.ContextBuilderTypeName.QName, "/letter/*/paragraph", ExtractionMode.Write),
+				new XPathExtractor(BizTalkFactoryProperties.OutboundTransportLocation.QName, "/letter/*/paragraph", ExtractionMode.Write),
+				new XPathExtractor(BizTalkFactoryProperties.MapTypeName.QName, "/letter/*/paragraph", ExtractionMode.Write)
 			};
 
 			using (var stream = XPathMutatorStreamFactory.Create(new StringStream(UNQUALIFIED_LETTER), extractors, () => MessageContextMock.Object))
@@ -95,18 +95,18 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 				stream.Drain();
 			}
 
-			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.SenderName, "paragraph-one"));
-			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.ReceiverName, "paragraph-one"));
-			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.EnvironmentTag, "paragraph-one"));
+			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.ContextBuilderTypeName, "paragraph-one"));
+			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.OutboundTransportLocation, "paragraph-one"));
+			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.MapTypeName, "paragraph-one"));
 		}
 
 		[Fact]
 		public void MatchQualified()
 		{
 			var extractors = new[] {
-				new XPathExtractor(BizTalkFactoryProperties.SenderName.QName, "/*[local-name()='letter']/*/*[local-name()='subject']", ExtractionMode.Write),
-				new XPathExtractor(BizTalkFactoryProperties.ReceiverName.QName, "/*[local-name()='letter']/*/*[local-name()='paragraph']", ExtractionMode.Write),
-				new XPathExtractor(BizTalkFactoryProperties.EnvironmentTag.QName, "/*[local-name()='letter']/*/*[local-name()='signature']", ExtractionMode.Write)
+				new XPathExtractor(BizTalkFactoryProperties.ContextBuilderTypeName.QName, "/*[local-name()='letter']/*/*[local-name()='subject']", ExtractionMode.Write),
+				new XPathExtractor(BizTalkFactoryProperties.OutboundTransportLocation.QName, "/*[local-name()='letter']/*/*[local-name()='paragraph']", ExtractionMode.Write),
+				new XPathExtractor(BizTalkFactoryProperties.MapTypeName.QName, "/*[local-name()='letter']/*/*[local-name()='signature']", ExtractionMode.Write)
 			};
 
 			using (var stream = XPathMutatorStreamFactory.Create(new StringStream(QUALIFIED_LETTER), extractors, () => MessageContextMock.Object))
@@ -114,18 +114,18 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 				stream.Drain();
 			}
 
-			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.SenderName, "inquiry"));
-			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.ReceiverName, "paragraph-one"));
-			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.EnvironmentTag, "John Doe"));
+			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.ContextBuilderTypeName, "inquiry"));
+			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.OutboundTransportLocation, "paragraph-one"));
+			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.MapTypeName, "John Doe"));
 		}
 
 		[Fact]
 		public void MatchWithPositionWhenQualified()
 		{
 			var extractors = new[] {
-				new XPathExtractor(BizTalkFactoryProperties.SenderName.QName, "/*[local-name()='letter']/*/*[local-name()='paragraph'][1]", ExtractionMode.Write),
-				new XPathExtractor(BizTalkFactoryProperties.ReceiverName.QName, "/*[local-name()='letter']/*/*[local-name()='paragraph'][2]", ExtractionMode.Write),
-				new XPathExtractor(BizTalkFactoryProperties.EnvironmentTag.QName, "/*[local-name()='letter']/*/*[local-name()='paragraph'][3]", ExtractionMode.Write)
+				new XPathExtractor(BizTalkFactoryProperties.ContextBuilderTypeName.QName, "/*[local-name()='letter']/*/*[local-name()='paragraph'][1]", ExtractionMode.Write),
+				new XPathExtractor(BizTalkFactoryProperties.OutboundTransportLocation.QName, "/*[local-name()='letter']/*/*[local-name()='paragraph'][2]", ExtractionMode.Write),
+				new XPathExtractor(BizTalkFactoryProperties.MapTypeName.QName, "/*[local-name()='letter']/*/*[local-name()='paragraph'][3]", ExtractionMode.Write)
 			};
 
 			using (var stream = XPathMutatorStreamFactory.Create(new StringStream(QUALIFIED_LETTER), extractors, () => MessageContextMock.Object))
@@ -142,9 +142,9 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		public void MatchWithPositionWhenUnqualified()
 		{
 			var extractors = new[] {
-				new XPathExtractor(BizTalkFactoryProperties.SenderName.QName, "/letter/*/paragraph[1]", ExtractionMode.Write),
-				new XPathExtractor(BizTalkFactoryProperties.ReceiverName.QName, "/letter/*/paragraph[2]", ExtractionMode.Write),
-				new XPathExtractor(BizTalkFactoryProperties.EnvironmentTag.QName, "/letter/*/paragraph[3]", ExtractionMode.Write)
+				new XPathExtractor(BizTalkFactoryProperties.ContextBuilderTypeName.QName, "/letter/*/paragraph[1]", ExtractionMode.Write),
+				new XPathExtractor(BizTalkFactoryProperties.OutboundTransportLocation.QName, "/letter/*/paragraph[2]", ExtractionMode.Write),
+				new XPathExtractor(BizTalkFactoryProperties.MapTypeName.QName, "/letter/*/paragraph[3]", ExtractionMode.Write)
 			};
 
 			using (var stream = XPathMutatorStreamFactory.Create(new StringStream(UNQUALIFIED_LETTER), extractors, () => MessageContextMock.Object))
@@ -152,9 +152,9 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 				stream.Drain();
 			}
 
-			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.SenderName, "paragraph-one"));
-			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.ReceiverName, "paragraph-six"));
-			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.EnvironmentTag, "paragraph-two"));
+			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.ContextBuilderTypeName, "paragraph-one"));
+			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.OutboundTransportLocation, "paragraph-six"));
+			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.MapTypeName, "paragraph-two"));
 		}
 
 		public ReactiveXPathExtractorCollectionFixture()

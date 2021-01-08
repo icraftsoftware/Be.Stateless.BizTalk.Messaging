@@ -28,8 +28,67 @@ using Microsoft.XLANGs.BaseTypes;
 
 namespace Be.Stateless.BizTalk.Message
 {
-	public static class MessageFactory
+	public static class MessageBodyFactory
 	{
+		/// <summary>
+		/// Creates a dummy instance document of a given <see cref="SchemaBase"/>-derived schema type <typeparamref name="T"/>.
+		/// </summary>
+		/// <typeparam name="T">
+		/// The <see cref="SchemaBase"/>-derived schema type.
+		/// </typeparam>
+		/// <returns>
+		/// The dummy instance document as an <see cref="XmlDocument"/>.
+		/// </returns>
+		public static XmlDocument Create<T>() where T : SchemaBase, new()
+		{
+			return Create(SchemaMetadata.For<T>().DocumentSpec);
+		}
+
+		/// <summary>
+		/// Creates an <see cref="XmlDocument"/> from a given <paramref name="content"/> and ensures its validity against a given
+		/// <see cref="SchemaBase"/>-derived schema type <typeparamref name="T"/>.
+		/// </summary>
+		/// <typeparam name="T">
+		/// The <see cref="SchemaBase"/>-derived schema type.
+		/// </typeparam>
+		/// <param name="content">
+		/// The instance document content.
+		/// </param>
+		/// <returns>
+		/// The valid instance document as an <see cref="XmlDocument"/>.
+		/// </returns>
+		[SuppressMessage("ReSharper", "UnusedMethodReturnValue.Global", Justification = "Public API.")]
+		public static XmlDocument Create<T>(string content) where T : SchemaBase, new()
+		{
+			using (var reader = XmlReader.Create(new StringReader(content), new XmlReaderSettings { XmlResolver = null }))
+			using (var xmlReader = ValidatingXmlReader.Create<T>(reader))
+			{
+				var message = new XmlDocument { XmlResolver = null };
+				message.Load(xmlReader);
+				return message;
+			}
+		}
+
+		/// <summary>
+		/// Creates a dummy instance document of a given <see cref="SchemaBase"/>-derived schema type <paramref name="schema"/>.
+		/// </summary>
+		/// <param name="schema">
+		/// The <see cref="SchemaBase"/>-derived schema type.
+		/// </param>
+		/// <returns>
+		/// The dummy instance document as an <see cref="XmlDocument"/>.
+		/// </returns>
+		[SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Done by .IsSchema() extension method.")]
+		[SuppressMessage("ReSharper", "UnusedMethodReturnValue.Global", Justification = "Public API.")]
+		public static XmlDocument Create(Type schema)
+		{
+			if (!schema.IsSchema())
+				throw new ArgumentException(
+					$"{schema.FullName} does not derive from {typeof(SchemaBase).FullName}.",
+					nameof(schema));
+			return Create(SchemaMetadata.For(schema).DocumentSpec);
+		}
+
 		/// <summary>
 		/// Creates a envelope document with content for a given <see cref="SchemaBase"/>-derived envelope schema type
 		/// <typeparamref name="TE"/> and <see cref="SchemaBase"/>-derived content schema type <typeparamref name="TC"/> .
@@ -58,65 +117,6 @@ namespace Be.Stateless.BizTalk.Message
 		}
 
 		/// <summary>
-		/// Creates a dummy instance document of a given <see cref="SchemaBase"/>-derived schema type <typeparamref name="T"/>.
-		/// </summary>
-		/// <typeparam name="T">
-		/// The <see cref="SchemaBase"/>-derived schema type.
-		/// </typeparam>
-		/// <returns>
-		/// The dummy instance document as an <see cref="XmlDocument"/>.
-		/// </returns>
-		public static XmlDocument CreateMessage<T>() where T : SchemaBase, new()
-		{
-			return CreateMessage(SchemaMetadata.For<T>().DocumentSpec);
-		}
-
-		/// <summary>
-		/// Creates an <see cref="XmlDocument"/> from a given <paramref name="content"/> and ensures its validity against a given
-		/// <see cref="SchemaBase"/>-derived schema type <typeparamref name="T"/>.
-		/// </summary>
-		/// <typeparam name="T">
-		/// The <see cref="SchemaBase"/>-derived schema type.
-		/// </typeparam>
-		/// <param name="content">
-		/// The instance document content.
-		/// </param>
-		/// <returns>
-		/// The valid instance document as an <see cref="XmlDocument"/>.
-		/// </returns>
-		[SuppressMessage("ReSharper", "UnusedMethodReturnValue.Global", Justification = "Public API.")]
-		public static XmlDocument CreateMessage<T>(string content) where T : SchemaBase, new()
-		{
-			using (var reader = XmlReader.Create(new StringReader(content), new XmlReaderSettings { XmlResolver = null }))
-			using (var xmlReader = ValidatingXmlReader.Create<T>(reader))
-			{
-				var message = new XmlDocument { XmlResolver = null };
-				message.Load(xmlReader);
-				return message;
-			}
-		}
-
-		/// <summary>
-		/// Creates a dummy instance document of a given <see cref="SchemaBase"/>-derived schema type <paramref name="schema"/>.
-		/// </summary>
-		/// <param name="schema">
-		/// The <see cref="SchemaBase"/>-derived schema type.
-		/// </param>
-		/// <returns>
-		/// The dummy instance document as an <see cref="XmlDocument"/>.
-		/// </returns>
-		[SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Done by .IsSchema() extension method.")]
-		[SuppressMessage("ReSharper", "UnusedMethodReturnValue.Global", Justification = "Public API.")]
-		public static XmlDocument CreateMessage(Type schema)
-		{
-			if (!schema.IsSchema())
-				throw new ArgumentException(
-					$"{schema.FullName} does not derive from {typeof(SchemaBase).FullName}.",
-					nameof(schema));
-			return CreateMessage(SchemaMetadata.For(schema).DocumentSpec);
-		}
-
-		/// <summary>
 		/// Creates a dummy instance document for a given schema <see cref="DocumentSpec"/>.
 		/// </summary>
 		/// <param name="documentSpec">
@@ -126,7 +126,8 @@ namespace Be.Stateless.BizTalk.Message
 		/// The dummy instance document.
 		/// </returns>
 		/// <seealso href="http://biztalkmessages.vansplunteren.net/2008/06/19/create-message-instance-from-multiroot-xsd-using-documentspec/"/>
-		private static XmlDocument CreateMessage(DocumentSpec documentSpec)
+		[SuppressMessage("ReSharper", "SuggestBaseTypeForParameter")]
+		private static XmlDocument Create(DocumentSpec documentSpec)
 		{
 			using (var writer = new StringWriter())
 			using (var reader = XmlReader.Create(documentSpec.CreateXmlInstance(writer), new XmlReaderSettings { CloseInput = true, XmlResolver = null }))

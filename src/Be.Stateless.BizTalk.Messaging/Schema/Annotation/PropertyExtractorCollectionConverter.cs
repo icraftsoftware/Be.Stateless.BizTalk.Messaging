@@ -70,6 +70,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		/// </returns>
 		/// <seealso cref="Deserialize"/>
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API.")]
+		[SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
 		public static string Serialize(PropertyExtractorCollection extractors)
 		{
 			if (extractors == null || !extractors.Any()) return null;

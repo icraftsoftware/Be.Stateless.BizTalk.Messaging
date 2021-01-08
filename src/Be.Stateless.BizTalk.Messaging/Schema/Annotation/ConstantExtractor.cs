@@ -77,6 +77,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			return other.GetType() == GetType() && Equals((ConstantExtractor) other);
 		}
 
+		[SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
 		public override void Execute(IBaseMessageContext messageContext)
 		{
 			if (messageContext == null) throw new ArgumentNullException(nameof(messageContext));

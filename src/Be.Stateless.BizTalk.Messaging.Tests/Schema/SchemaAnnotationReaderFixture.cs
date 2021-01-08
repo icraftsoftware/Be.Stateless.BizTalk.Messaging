@@ -17,7 +17,7 @@
 #endregion
 
 using System.Xml.Linq;
-using Be.Stateless.BizTalk.Resources.Schema;
+using Be.Stateless.BizTalk.Dummies.Schema;
 using FluentAssertions;
 using Xunit;
 
