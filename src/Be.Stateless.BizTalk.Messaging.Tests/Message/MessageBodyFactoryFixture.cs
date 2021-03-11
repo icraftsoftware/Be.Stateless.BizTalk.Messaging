@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,41 +21,55 @@ using System.Diagnostics.CodeAnalysis;
 using System.Xml.Schema;
 using BTS;
 using FluentAssertions;
+using Microsoft.BizTalk.Edi.BaseArtifacts;
 using Xunit;
+using static Be.Stateless.Unit.DelegateFactory;
 
 namespace Be.Stateless.BizTalk.Message
 {
 	public class MessageBodyFactoryFixture
 	{
 		[Fact]
+		public void CreateEnvelopeWithContent()
+		{
+			Action(
+					() => MessageBodyFactory.CreateEnvelope<ResendControlEnvelope, soap_envelope_1__1.Fault>(
+						"<ns0:ControlMessage xmlns:ns0=\"http://schemas.microsoft.com/BizTalk/2006/reliability-properties\">" +
+						"<ns0:Fault xmlns:ns0=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
+						"<faultcode>ns0:Server</faultcode>" +
+						"<faultstring>Missing or Invalid Information</faultstring>" +
+						"<faultactor>clint</faultactor>" +
+						"</ns0:Fault>" +
+						"</ns0:ControlMessage>"))
+				.Should().NotThrow();
+		}
+
+		[Fact]
 		public void CreatingMessageBodyBySchemaTypeNeverThrows()
 		{
-			Action act = () => MessageBodyFactory.Create<soap_envelope_1__2.Envelope>();
-			act.Should().NotThrow();
+			Action(() => MessageBodyFactory.Create<soap_envelope_1__2.Envelope>()).Should().NotThrow();
 		}
 
 		[Fact]
 		[SuppressMessage("ReSharper", "StringLiteralTypo")]
 		public void CreatingMessageBodyForNonSchemaTypeThrows()
 		{
-			Action act = () => MessageBodyFactory.Create(typeof(int));
-			act.Should().Throw<ArgumentException>().WithMessage("System.Int32 does not derive from Microsoft.XLANGs.BaseTypes.SchemaBase.*");
+			Action(() => MessageBodyFactory.Create(typeof(int)))
+				.Should().Throw<ArgumentException>().WithMessage("System.Int32 does not derive from Microsoft.XLANGs.BaseTypes.SchemaBase.*");
 		}
 
 		[Fact]
 		public void CreatingMessageBodyWithInvalidContentThrows()
 		{
 			var content = MessageBodyFactory.Create<soap_envelope_1__1.Envelope>().OuterXml;
-			Action act = () => MessageBodyFactory.Create<soap_envelope_1__2.Envelope>(content);
-			act.Should().Throw<XmlSchemaValidationException>();
+			Action(() => MessageBodyFactory.Create<soap_envelope_1__2.Envelope>(content)).Should().Throw<XmlSchemaValidationException>();
 		}
 
 		[Fact]
 		public void CreatingMessageBodyWithValidContentDoesNotThrow()
 		{
 			var content = MessageBodyFactory.Create<soap_envelope_1__2.Envelope>().OuterXml;
-			Action act = () => MessageBodyFactory.Create<soap_envelope_1__2.Envelope>(content);
-			act.Should().NotThrow();
+			Action(() => MessageBodyFactory.Create<soap_envelope_1__2.Envelope>(content)).Should().NotThrow();
 		}
 	}
 }

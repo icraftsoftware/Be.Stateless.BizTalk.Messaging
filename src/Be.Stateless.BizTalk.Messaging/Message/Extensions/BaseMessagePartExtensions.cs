@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -60,8 +60,8 @@ namespace Be.Stateless.BizTalk.Message.Extensions
 		/// Pipeline's resource tracker to which to report the newly created wrapping stream.
 		/// </param>
 		/// <returns>
-		/// The new wrapping <see cref="Stream"/> if it is not the same instance as the original one. The original <see
-		/// cref="Stream"/> otherwise.
+		/// The new wrapping <see cref="System.IO.Stream"/> if it is not the same instance as the original one. The original <see
+		/// cref="System.IO.Stream"/> otherwise.
 		/// </returns>
 		public static T WrapOriginalDataStream<T>(this IBaseMessagePart messagePart, Func<System.IO.Stream, T> wrapper, IResourceTracker tracker) where T : System.IO.Stream
 		{
