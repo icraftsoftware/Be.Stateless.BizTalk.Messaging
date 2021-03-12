@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ using System.Xml;
 using FluentAssertions;
 using Microsoft.BizTalk.XPath;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Schema.Annotation
 {
@@ -44,7 +44,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			sut.Should().BeSameAs(PropertyExtractorCollection.Empty);
 			using (var reader = XmlReader.Create(new StringReader("")))
 			{
-				Action(() => sut.ReadXml(reader)).Should().Throw<NotSupportedException>();
+				Invoking(() => sut.ReadXml(reader)).Should().Throw<NotSupportedException>();
 			}
 
 			sut = new PropertyExtractor[] { new XPathExtractor(new XmlQualifiedName("Property1", "urn"), "*/some-node", ExtractionMode.Write) };
@@ -100,7 +100,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader)).Should().Throw<ArgumentException>().WithMessage("ExtractionMode 'Demote' is not supported by ConstantExtractor.*");
+				Invoking(() => sut.ReadXml(reader)).Should().Throw<ArgumentException>().WithMessage("ExtractionMode 'Demote' is not supported by ConstantExtractor.*");
 			}
 		}
 
@@ -115,7 +115,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader)).Should().Throw<ArgumentNullException>().Where(e => e.ParamName == "value");
+				Invoking(() => sut.ReadXml(reader)).Should().Throw<ArgumentNullException>().Where(e => e.ParamName == "value");
 			}
 		}
 
@@ -190,7 +190,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ArgumentException>()
 					.WithMessage("Invalid ExtractionMode, only Clear and Ignore are supported for PropertyExtractor without a Value or an XPath.*");
 			}
@@ -207,7 +207,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ConfigurationErrorsException>().WithMessage("ExtractionMode is missing for PropertyExtractor without a Value or an XPath.*");
 			}
 		}
@@ -223,7 +223,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ConfigurationErrorsException>().WithMessage("ExtractionMode is missing for PropertyExtractor without a Value or an XPath.*");
 			}
 		}
@@ -289,7 +289,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ConfigurationErrorsException>()
 					.WithInnerException<XPathException>()
 					// ReSharper disable once StringLiteralTypo
@@ -342,7 +342,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ConfigurationErrorsException>()
 					.WithInnerException<XmlException>()
 					.WithMessage("The following properties are declared multiple times: [urn:PropertyName].");
@@ -364,7 +364,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ConfigurationErrorsException>()
 					.WithInnerException<XmlException>()
 					.WithMessage("The following properties are not associated with the target namespace URI of some property schema: [PropertyName].");
@@ -380,7 +380,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ConfigurationErrorsException>()
 					.WithInnerException<XmlException>()
 					.WithMessage($"Element 'Properties' with namespace name '{SchemaAnnotationCollection.NAMESPACE}' was not found. Line 1, position 2.");
@@ -396,7 +396,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ConfigurationErrorsException>()
 					.WithInnerException<XmlException>()
 					.WithMessage($"Element 'Properties' with namespace name '{SchemaAnnotationCollection.NAMESPACE}' was not found. Line 1, position 2.");
@@ -412,7 +412,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
 				var sut = new PropertyExtractorCollection();
-				Action(() => sut.ReadXml(reader))
+				Invoking(() => sut.ReadXml(reader))
 					.Should().Throw<ConfigurationErrorsException>()
 					.WithInnerException<XmlException>()
 					.WithMessage($"Element 'Properties' with namespace name '{SchemaAnnotationCollection.NAMESPACE}' was not found. Line 1, position 2.");

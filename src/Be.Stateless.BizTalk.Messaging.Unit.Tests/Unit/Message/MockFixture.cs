@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ using FluentAssertions;
 using Microsoft.BizTalk.Message.Interop;
 using Moq;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Unit.Message
 {
@@ -41,11 +41,11 @@ namespace Be.Stateless.BizTalk.Unit.Message
 			message.Setup(m => m.GetProperty(BtsProperties.ActualRetryCount)).Returns(10);
 			message.Setup(m => m.GetProperty(BtsProperties.SendPortName)).Returns("send-port-name");
 
-			Action(() => message.Object.GetProperty(BtsProperties.AckRequired)).Should().NotThrow();
+			Invoking(() => message.Object.GetProperty(BtsProperties.AckRequired)).Should().NotThrow();
 			message.Object.GetProperty(BtsProperties.AckRequired).Should().BeTrue();
-			Action(() => message.Object.GetProperty(BtsProperties.ActualRetryCount)).Should().NotThrow();
+			Invoking(() => message.Object.GetProperty(BtsProperties.ActualRetryCount)).Should().NotThrow();
 			message.Object.GetProperty(BtsProperties.ActualRetryCount).Should().Be(10);
-			Action(() => message.Object.GetProperty(BtsProperties.SendPortName)).Should().NotThrow();
+			Invoking(() => message.Object.GetProperty(BtsProperties.SendPortName)).Should().NotThrow();
 			message.Object.GetProperty(BtsProperties.SendPortName).Should().Be("send-port-name");
 		}
 
@@ -57,9 +57,9 @@ namespace Be.Stateless.BizTalk.Unit.Message
 			context.Setup(m => m.Promote(BtsProperties.ActualRetryCount, It.Is<int>(i => i % 2 == 0)));
 			context.Setup(m => m.Promote(BtsProperties.SendPortName, It.Is<string>(s => s.IsQName())));
 
-			Action(() => context.Object.Promote(BtsProperties.AckRequired, true)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.ActualRetryCount, 12)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.SendPortName, "ns:name")).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.AckRequired, true)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.ActualRetryCount, 12)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.SendPortName, "ns:name")).Should().NotThrow();
 		}
 
 		[Fact]
@@ -70,9 +70,9 @@ namespace Be.Stateless.BizTalk.Unit.Message
 			context.Setup(m => m.SetProperty(BtsProperties.ActualRetryCount, It.Is<int>(i => i % 2 != 0)));
 			context.Setup(m => m.SetProperty(BtsProperties.SendPortName, It.Is<string>(s => !s.IsQName())));
 
-			Action(() => context.Object.SetProperty(BtsProperties.AckRequired, false)).Should().NotThrow();
-			Action(() => context.Object.SetProperty(BtsProperties.ActualRetryCount, 11)).Should().NotThrow();
-			Action(() => context.Object.SetProperty(BtsProperties.SendPortName, "any name")).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.AckRequired, false)).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.ActualRetryCount, 11)).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.SendPortName, "any name")).Should().NotThrow();
 		}
 
 		[Fact]
@@ -83,9 +83,9 @@ namespace Be.Stateless.BizTalk.Unit.Message
 			context.Setup(m => m.Promote(BtsProperties.ActualRetryCount, It.IsAny<int>()));
 			context.Setup(m => m.Promote(BtsProperties.SendPortName, It.IsAny<string>()));
 
-			Action(() => context.Object.Promote(BtsProperties.AckRequired, false)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.ActualRetryCount, 11)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.SendPortName, "any-send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.AckRequired, false)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.ActualRetryCount, 11)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.SendPortName, "any-send-port-name")).Should().NotThrow();
 		}
 
 		[Fact]
@@ -96,9 +96,9 @@ namespace Be.Stateless.BizTalk.Unit.Message
 			context.Setup(m => m.SetProperty(BtsProperties.ActualRetryCount, It.IsAny<int>()));
 			context.Setup(m => m.SetProperty(BtsProperties.SendPortName, It.IsAny<string>()));
 
-			Action(() => context.Object.SetProperty(BtsProperties.AckRequired, false)).Should().NotThrow();
-			Action(() => context.Object.SetProperty(BtsProperties.ActualRetryCount, 11)).Should().NotThrow();
-			Action(() => context.Object.SetProperty(BtsProperties.SendPortName, "any-send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.AckRequired, false)).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.ActualRetryCount, 11)).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.SendPortName, "any-send-port-name")).Should().NotThrow();
 		}
 
 		[Fact]
@@ -338,10 +338,10 @@ namespace Be.Stateless.BizTalk.Unit.Message
 			message.Object.Context.IsPromoted(BtsProperties.SendPortName).Should().BeFalse();
 			message.Object.IsPromoted(BtsProperties.TransmitWorkId).Should().BeFalse();
 
-			Action(() => message.Verify(m => m.IsPromoted(BtsProperties.AckRequired))).Should().Throw<MockException>();
-			Action(() => message.Verify(m => m.IsPromoted(BtsProperties.ActualRetryCount))).Should().Throw<MockException>();
-			Action(() => message.Verify(m => m.IsPromoted(BtsProperties.SendPortName))).Should().Throw<MockException>();
-			Action(() => message.Verify(m => m.IsPromoted(BtsProperties.TransmitWorkId))).Should().Throw<MockException>();
+			Invoking(() => message.Verify(m => m.IsPromoted(BtsProperties.AckRequired))).Should().Throw<MockException>();
+			Invoking(() => message.Verify(m => m.IsPromoted(BtsProperties.ActualRetryCount))).Should().Throw<MockException>();
+			Invoking(() => message.Verify(m => m.IsPromoted(BtsProperties.SendPortName))).Should().Throw<MockException>();
+			Invoking(() => message.Verify(m => m.IsPromoted(BtsProperties.TransmitWorkId))).Should().Throw<MockException>();
 		}
 
 		[Fact]
@@ -398,9 +398,9 @@ namespace Be.Stateless.BizTalk.Unit.Message
 			message.Setup(m => m.Context.Promote(BtsProperties.ActualRetryCount, 10));
 			message.Setup(m => m.Context.Promote(BtsProperties.SendPortName, "send-port-name"));
 
-			Action(() => message.Object.Promote(BtsProperties.AckRequired, true)).Should().NotThrow();
-			Action(() => message.Object.Promote(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
-			Action(() => message.Object.Promote(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
+			Invoking(() => message.Object.Promote(BtsProperties.AckRequired, true)).Should().NotThrow();
+			Invoking(() => message.Object.Promote(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
+			Invoking(() => message.Object.Promote(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
 
 			// notice Promote() setup sets up a context.Read() setup too, i.e. GetProperty() extension method
 			message.Object.GetProperty(BtsProperties.AckRequired).Should().BeTrue();
@@ -433,7 +433,7 @@ namespace Be.Stateless.BizTalk.Unit.Message
 			message.Object.Promote(BtsProperties.AckRequired, true);
 			message.Object.Promote(BtsProperties.SendPortName, "send-port-name");
 
-			Action(() => message.Verify())
+			Invoking(() => message.Verify())
 				.Should().Throw<MockException>()
 				.Where(
 					e => Regex.IsMatch(
@@ -452,9 +452,9 @@ namespace Be.Stateless.BizTalk.Unit.Message
 			message.Setup(m => m.Promote(BtsProperties.ActualRetryCount, 10));
 			message.Setup(m => m.Promote(BtsProperties.SendPortName, "send-port-name"));
 
-			Action(() => message.Object.Context.Promote(BtsProperties.AckRequired, true)).Should().NotThrow();
-			Action(() => message.Object.Context.Promote(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
-			Action(() => message.Object.Context.Promote(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
+			Invoking(() => message.Object.Context.Promote(BtsProperties.AckRequired, true)).Should().NotThrow();
+			Invoking(() => message.Object.Context.Promote(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
+			Invoking(() => message.Object.Context.Promote(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
 
 			// notice Promote() setup sets up a context.Read() setup too, i.e. GetProperty() extension method
 			message.Object.Context.GetProperty(BtsProperties.AckRequired).Should().BeTrue();
@@ -487,7 +487,7 @@ namespace Be.Stateless.BizTalk.Unit.Message
 			message.Object.Context.Promote(BtsProperties.AckRequired, true);
 			message.Object.Context.Promote(BtsProperties.SendPortName, "send-port-name");
 
-			Action(() => message.Verify()).Should().Throw<MockException>().Where(
+			Invoking(() => message.Verify()).Should().Throw<MockException>().Where(
 				e => Regex.IsMatch(
 					e.Message,
 					"This mock failed verification due to the following:.+"

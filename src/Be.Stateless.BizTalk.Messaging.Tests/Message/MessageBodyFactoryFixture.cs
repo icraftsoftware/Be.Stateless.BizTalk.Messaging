@@ -23,7 +23,7 @@ using BTS;
 using FluentAssertions;
 using Microsoft.BizTalk.Edi.BaseArtifacts;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Message
 {
@@ -32,7 +32,7 @@ namespace Be.Stateless.BizTalk.Message
 		[Fact]
 		public void CreateEnvelopeWithContent()
 		{
-			Action(
+			Invoking(
 					() => MessageBodyFactory.CreateEnvelope<ResendControlEnvelope, soap_envelope_1__1.Fault>(
 						"<ns0:ControlMessage xmlns:ns0=\"http://schemas.microsoft.com/BizTalk/2006/reliability-properties\">" +
 						"<ns0:Fault xmlns:ns0=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
@@ -47,14 +47,14 @@ namespace Be.Stateless.BizTalk.Message
 		[Fact]
 		public void CreatingMessageBodyBySchemaTypeNeverThrows()
 		{
-			Action(() => MessageBodyFactory.Create<soap_envelope_1__2.Envelope>()).Should().NotThrow();
+			Invoking(() => MessageBodyFactory.Create<soap_envelope_1__2.Envelope>()).Should().NotThrow();
 		}
 
 		[Fact]
 		[SuppressMessage("ReSharper", "StringLiteralTypo")]
 		public void CreatingMessageBodyForNonSchemaTypeThrows()
 		{
-			Action(() => MessageBodyFactory.Create(typeof(int)))
+			Invoking(() => MessageBodyFactory.Create(typeof(int)))
 				.Should().Throw<ArgumentException>().WithMessage("System.Int32 does not derive from Microsoft.XLANGs.BaseTypes.SchemaBase.*");
 		}
 
@@ -62,14 +62,14 @@ namespace Be.Stateless.BizTalk.Message
 		public void CreatingMessageBodyWithInvalidContentThrows()
 		{
 			var content = MessageBodyFactory.Create<soap_envelope_1__1.Envelope>().OuterXml;
-			Action(() => MessageBodyFactory.Create<soap_envelope_1__2.Envelope>(content)).Should().Throw<XmlSchemaValidationException>();
+			Invoking(() => MessageBodyFactory.Create<soap_envelope_1__2.Envelope>(content)).Should().Throw<XmlSchemaValidationException>();
 		}
 
 		[Fact]
 		public void CreatingMessageBodyWithValidContentDoesNotThrow()
 		{
 			var content = MessageBodyFactory.Create<soap_envelope_1__2.Envelope>().OuterXml;
-			Action(() => MessageBodyFactory.Create<soap_envelope_1__2.Envelope>(content)).Should().NotThrow();
+			Invoking(() => MessageBodyFactory.Create<soap_envelope_1__2.Envelope>(content)).Should().NotThrow();
 		}
 	}
 }

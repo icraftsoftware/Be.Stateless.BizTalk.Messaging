@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ using Be.Stateless.BizTalk.Schemas.Xml;
 using FluentAssertions;
 using Microsoft.BizTalk.Component.Interop;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Schema
 {
@@ -105,7 +105,7 @@ namespace Be.Stateless.BizTalk.Schema
 		[Fact]
 		public void ForThrowsForPropertySchema()
 		{
-			Action(() => SchemaMetadata.For<Schemas.BizTalkFactory.Properties>())
+			Invoking(() => SchemaMetadata.For<Schemas.BizTalkFactory.Properties>())
 				.Should().Throw<ArgumentException>()
 				.WithMessage("SchemaMetadata only supports schemas qualified with a SchemaTypeAttribute whose Type is equal to Document*");
 		}

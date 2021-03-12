@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ using FluentAssertions;
 using Microsoft.BizTalk.Message.Interop;
 using Moq;
 using Xunit;
-using static Be.Stateless.Unit.DelegateFactory;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Unit.Message.Context
 {
@@ -38,11 +38,11 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.GetProperty(BtsProperties.ActualRetryCount)).Returns(10);
 			context.Setup(c => c.GetProperty(BtsProperties.SendPortName)).Returns("send-port-name");
 
-			Action(() => context.Object.GetProperty(BtsProperties.AckRequired)).Should().NotThrow();
+			Invoking(() => context.Object.GetProperty(BtsProperties.AckRequired)).Should().NotThrow();
 			context.Object.GetProperty(BtsProperties.AckRequired).Should().BeTrue();
-			Action(() => context.Object.GetProperty(BtsProperties.ActualRetryCount)).Should().NotThrow();
+			Invoking(() => context.Object.GetProperty(BtsProperties.ActualRetryCount)).Should().NotThrow();
 			context.Object.GetProperty(BtsProperties.ActualRetryCount).Should().Be(10);
-			Action(() => context.Object.GetProperty(BtsProperties.SendPortName)).Should().NotThrow();
+			Invoking(() => context.Object.GetProperty(BtsProperties.SendPortName)).Should().NotThrow();
 			context.Object.GetProperty(BtsProperties.SendPortName).Should().Be("send-port-name");
 		}
 
@@ -54,9 +54,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount, It.Is<int>(i => i % 2 == 0)));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName, It.Is<string>(s => s.IsQName())));
 
-			Action(() => context.Object.Promote(BtsProperties.AckRequired, true)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.ActualRetryCount, 12)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.SendPortName, "ns:name")).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.AckRequired, true)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.ActualRetryCount, 12)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.SendPortName, "ns:name")).Should().NotThrow();
 		}
 
 		[Fact]
@@ -67,9 +67,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.SetProperty(BtsProperties.ActualRetryCount, It.Is<int>(i => i % 2 != 0)));
 			context.Setup(c => c.SetProperty(BtsProperties.SendPortName, It.Is<string>(s => !s.IsQName())));
 
-			Action(() => context.Object.SetProperty(BtsProperties.AckRequired, false)).Should().NotThrow();
-			Action(() => context.Object.SetProperty(BtsProperties.ActualRetryCount, 11)).Should().NotThrow();
-			Action(() => context.Object.SetProperty(BtsProperties.SendPortName, "any name")).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.AckRequired, false)).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.ActualRetryCount, 11)).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.SendPortName, "any name")).Should().NotThrow();
 		}
 
 		[Fact]
@@ -80,9 +80,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount, It.IsAny<int>()));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName, It.IsAny<string>()));
 
-			Action(() => context.Object.Promote(BtsProperties.AckRequired, false)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.ActualRetryCount, 11)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.SendPortName, "any-send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.AckRequired, false)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.ActualRetryCount, 11)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.SendPortName, "any-send-port-name")).Should().NotThrow();
 		}
 
 		[Fact]
@@ -93,9 +93,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.SetProperty(BtsProperties.ActualRetryCount, It.IsAny<int>()));
 			context.Setup(c => c.SetProperty(BtsProperties.SendPortName, It.IsAny<string>()));
 
-			Action(() => context.Object.SetProperty(BtsProperties.AckRequired, false)).Should().NotThrow();
-			Action(() => context.Object.SetProperty(BtsProperties.ActualRetryCount, 11)).Should().NotThrow();
-			Action(() => context.Object.SetProperty(BtsProperties.SendPortName, "any-send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.AckRequired, false)).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.ActualRetryCount, 11)).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.SendPortName, "any-send-port-name")).Should().NotThrow();
 		}
 
 		[Fact]
@@ -151,9 +151,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 				.Callback((string n, string ns) => callbackCount += n == BtsProperties.SendPortName.Name ? 1 : -1)
 				.Returns(() => "send-port-name");
 
-			Action(() => context.Object.GetProperty(BtsProperties.ReceiveLocationName)).Should().NotThrow();
+			Invoking(() => context.Object.GetProperty(BtsProperties.ReceiveLocationName)).Should().NotThrow();
 			context.Object.GetProperty(BtsProperties.ReceiveLocationName).Should().Be("receive-location-name");
-			Action(() => context.Object.GetProperty(BtsProperties.SendPortName)).Should().NotThrow();
+			Invoking(() => context.Object.GetProperty(BtsProperties.SendPortName)).Should().NotThrow();
 			context.Object.GetProperty(BtsProperties.SendPortName).Should().Be("send-port-name");
 
 			callbackCount.Should().Be(4);
@@ -180,9 +180,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, null));
 			context.Setup(c => c.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, null));
 
-			Action(() => context.Object.DeleteProperty(BtsProperties.AckRequired)).Should().NotThrow();
-			Action(() => context.Object.DeleteProperty(BtsProperties.ActualRetryCount)).Should().NotThrow();
-			Action(() => context.Object.DeleteProperty(BtsProperties.SendPortName)).Should().NotThrow();
+			Invoking(() => context.Object.DeleteProperty(BtsProperties.AckRequired)).Should().NotThrow();
+			Invoking(() => context.Object.DeleteProperty(BtsProperties.ActualRetryCount)).Should().NotThrow();
+			Invoking(() => context.Object.DeleteProperty(BtsProperties.SendPortName)).Should().NotThrow();
 		}
 
 		[Fact]
@@ -193,9 +193,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, null));
 			context.Setup(c => c.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, null));
 
-			Action(() => context.Object.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, null)).Should().NotThrow();
-			Action(() => context.Object.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, null)).Should().NotThrow();
-			Action(() => context.Object.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, null)).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, null)).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, null)).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, null)).Should().NotThrow();
 
 			context.Verify(c => c.DeleteProperty(BtsProperties.AckRequired));
 			context.Verify(c => c.DeleteProperty(BtsProperties.ActualRetryCount));
@@ -210,9 +210,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.DeleteProperty(BtsProperties.ActualRetryCount));
 			context.Setup(c => c.DeleteProperty(BtsProperties.SendPortName));
 
-			Action(() => context.Object.DeleteProperty(BtsProperties.AckRequired)).Should().NotThrow();
-			Action(() => context.Object.DeleteProperty(BtsProperties.ActualRetryCount)).Should().NotThrow();
-			Action(() => context.Object.DeleteProperty(BtsProperties.SendPortName)).Should().NotThrow();
+			Invoking(() => context.Object.DeleteProperty(BtsProperties.AckRequired)).Should().NotThrow();
+			Invoking(() => context.Object.DeleteProperty(BtsProperties.ActualRetryCount)).Should().NotThrow();
+			Invoking(() => context.Object.DeleteProperty(BtsProperties.SendPortName)).Should().NotThrow();
 		}
 
 		[Fact]
@@ -223,9 +223,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.DeleteProperty(BtsProperties.ActualRetryCount));
 			context.Setup(c => c.DeleteProperty(BtsProperties.SendPortName));
 
-			Action(() => context.Object.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, null)).Should().NotThrow();
-			Action(() => context.Object.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, null)).Should().NotThrow();
-			Action(() => context.Object.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, null)).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, null)).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, null)).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, null)).Should().NotThrow();
 		}
 
 		[Fact]
@@ -236,9 +236,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.DeleteProperty(BtsProperties.ActualRetryCount));
 			context.Setup(c => c.DeleteProperty(BtsProperties.SendPortName));
 
-			Action(() => context.Object.DeleteProperty(BtsProperties.AckRequired)).Should().NotThrow();
-			Action(() => context.Object.DeleteProperty(BtsProperties.ActualRetryCount)).Should().NotThrow();
-			Action(() => context.Object.DeleteProperty(BtsProperties.SendPortName)).Should().NotThrow();
+			Invoking(() => context.Object.DeleteProperty(BtsProperties.AckRequired)).Should().NotThrow();
+			Invoking(() => context.Object.DeleteProperty(BtsProperties.ActualRetryCount)).Should().NotThrow();
+			Invoking(() => context.Object.DeleteProperty(BtsProperties.SendPortName)).Should().NotThrow();
 
 			context.Verify(c => c.DeleteProperty(BtsProperties.AckRequired));
 			context.Verify(c => c.DeleteProperty(BtsProperties.ActualRetryCount));
@@ -253,9 +253,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.DeleteProperty(BtsProperties.ActualRetryCount));
 			context.Setup(c => c.DeleteProperty(BtsProperties.SendPortName));
 
-			Action(() => context.Object.DeleteProperty(BtsProperties.AckRequired)).Should().NotThrow();
-			Action(() => context.Object.DeleteProperty(BtsProperties.ActualRetryCount)).Should().NotThrow();
-			Action(() => context.Object.DeleteProperty(BtsProperties.SendPortName)).Should().NotThrow();
+			Invoking(() => context.Object.DeleteProperty(BtsProperties.AckRequired)).Should().NotThrow();
+			Invoking(() => context.Object.DeleteProperty(BtsProperties.ActualRetryCount)).Should().NotThrow();
+			Invoking(() => context.Object.DeleteProperty(BtsProperties.SendPortName)).Should().NotThrow();
 
 			context.Verify(c => c.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, null));
 			context.Verify(c => c.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, null));
@@ -270,9 +270,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.DeleteProperty(BtsProperties.ActualRetryCount));
 			context.Setup(c => c.DeleteProperty(BtsProperties.SendPortName));
 
-			Action(() => context.Object.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, null)).Should().NotThrow();
-			Action(() => context.Object.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, null)).Should().NotThrow();
-			Action(() => context.Object.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, null)).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, null)).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, null)).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, null)).Should().NotThrow();
 
 			context.Verify(c => c.DeleteProperty(BtsProperties.AckRequired));
 			context.Verify(c => c.DeleteProperty(BtsProperties.ActualRetryCount));
@@ -422,9 +422,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Object.IsPromoted(BtsProperties.SendPortName).Should().BeFalse();
 
 			// IsPromoted() call cannot be verified as well because it is actually rewritten as two core operations: Read() and IsPromoted()
-			Action(() => context.Verify(c => c.IsPromoted(BtsProperties.AckRequired))).Should().Throw<MockException>();
-			Action(() => context.Verify(c => c.IsPromoted(BtsProperties.ActualRetryCount))).Should().Throw<MockException>();
-			Action(() => context.Verify(c => c.IsPromoted(BtsProperties.SendPortName))).Should().Throw<MockException>();
+			Invoking(() => context.Verify(c => c.IsPromoted(BtsProperties.AckRequired))).Should().Throw<MockException>();
+			Invoking(() => context.Verify(c => c.IsPromoted(BtsProperties.ActualRetryCount))).Should().Throw<MockException>();
+			Invoking(() => context.Verify(c => c.IsPromoted(BtsProperties.SendPortName))).Should().Throw<MockException>();
 		}
 
 		[Fact]
@@ -488,9 +488,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 
 			// Core IsPromoted() cannot be verified because IsPromoted() extension method calls core IsPromoted() after
 			// having called core Read() method only if the latter returns a property value
-			Action(() => context.Verify(c => c.IsPromoted(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace))).Should().Throw<MockException>();
-			Action(() => context.Verify(c => c.IsPromoted(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace))).Should().Throw<MockException>();
-			Action(() => context.Verify(c => c.IsPromoted(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace))).Should().Throw<MockException>();
+			Invoking(() => context.Verify(c => c.IsPromoted(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace))).Should().Throw<MockException>();
+			Invoking(() => context.Verify(c => c.IsPromoted(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace))).Should().Throw<MockException>();
+			Invoking(() => context.Verify(c => c.IsPromoted(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace))).Should().Throw<MockException>();
 		}
 
 		[Fact]
@@ -525,9 +525,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Object.IsPromoted(BtsProperties.SendPortName).Should().BeFalse();
 
 			// IsPromoted() call cannot be verified as well because it is actually rewritten as two core operations: Read() and IsPromoted()
-			Action(() => context.Verify(c => c.IsPromoted(BtsProperties.AckRequired))).Should().Throw<MockException>();
-			Action(() => context.Verify(c => c.IsPromoted(BtsProperties.ActualRetryCount))).Should().Throw<MockException>();
-			Action(() => context.Verify(c => c.IsPromoted(BtsProperties.SendPortName))).Should().Throw<MockException>();
+			Invoking(() => context.Verify(c => c.IsPromoted(BtsProperties.AckRequired))).Should().Throw<MockException>();
+			Invoking(() => context.Verify(c => c.IsPromoted(BtsProperties.ActualRetryCount))).Should().Throw<MockException>();
+			Invoking(() => context.Verify(c => c.IsPromoted(BtsProperties.SendPortName))).Should().Throw<MockException>();
 		}
 
 		[Fact]
@@ -538,9 +538,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name"));
 
-			Action(() => context.Object.Promote(BtsProperties.AckRequired, true)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.AckRequired, true)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
 		}
 
 		[Fact]
@@ -551,9 +551,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name"));
 
-			Action(() => context.Object.Promote(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name")).Should().NotThrow();
 
 			context.Verify(c => c.Promote(BtsProperties.AckRequired, true));
 			context.Verify(c => c.Promote(BtsProperties.ActualRetryCount, 10));
@@ -568,9 +568,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName, "send-port-name"));
 
-			Action(() => context.Object.Promote(BtsProperties.AckRequired, true)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.AckRequired, true)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
 		}
 
 		[Fact]
@@ -581,9 +581,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName, "send-port-name"));
 
-			Action(() => context.Object.Promote(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name")).Should().NotThrow();
 		}
 
 		[Fact]
@@ -594,9 +594,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName, "send-port-name"));
 
-			Action(() => context.Object.Promote(BtsProperties.AckRequired, true)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.AckRequired, true)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
 
 			context.Verify(c => c.Promote(BtsProperties.AckRequired, true));
 			context.Verify(c => c.Promote(BtsProperties.ActualRetryCount, 10));
@@ -611,9 +611,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName, "send-port-name"));
 
-			Action(() => context.Object.Promote(BtsProperties.AckRequired, true)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.AckRequired, true)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
 
 			context.Verify(c => c.Promote(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true));
 			context.Verify(c => c.Promote(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10));
@@ -628,9 +628,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.Promote(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.Promote(BtsProperties.SendPortName, "send-port-name"));
 
-			Action(() => context.Object.Promote(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10)).Should().NotThrow();
-			Action(() => context.Object.Promote(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10)).Should().NotThrow();
+			Invoking(() => context.Object.Promote(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name")).Should().NotThrow();
 
 			context.Verify(c => c.Promote(BtsProperties.AckRequired, true));
 			context.Verify(c => c.Promote(BtsProperties.ActualRetryCount, 10));
@@ -645,9 +645,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10));
 			context.Setup(c => c.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name"));
 
-			Action(() => context.Object.SetProperty(BtsProperties.AckRequired, true)).Should().NotThrow();
-			Action(() => context.Object.SetProperty(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
-			Action(() => context.Object.SetProperty(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.AckRequired, true)).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
 		}
 
 		[Fact]
@@ -658,9 +658,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10));
 			context.Setup(c => c.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name"));
 
-			Action(() => context.Object.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true)).Should().NotThrow();
-			Action(() => context.Object.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10)).Should().NotThrow();
-			Action(() => context.Object.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true)).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10)).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name")).Should().NotThrow();
 
 			context.Verify(c => c.SetProperty(BtsProperties.AckRequired, true));
 			context.Verify(c => c.SetProperty(BtsProperties.ActualRetryCount, 10));
@@ -675,9 +675,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.SetProperty(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.SetProperty(BtsProperties.SendPortName, "send-port-name"));
 
-			Action(() => context.Object.SetProperty(BtsProperties.AckRequired, true)).Should().NotThrow();
-			Action(() => context.Object.SetProperty(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
-			Action(() => context.Object.SetProperty(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.AckRequired, true)).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
 		}
 
 		[Fact]
@@ -688,9 +688,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.SetProperty(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.SetProperty(BtsProperties.SendPortName, "send-port-name"));
 
-			Action(() => context.Object.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true)).Should().NotThrow();
-			Action(() => context.Object.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10)).Should().NotThrow();
-			Action(() => context.Object.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true)).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10)).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name")).Should().NotThrow();
 		}
 
 		[Fact]
@@ -701,9 +701,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.SetProperty(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.SetProperty(BtsProperties.SendPortName, "send-port-name"));
 
-			Action(() => context.Object.SetProperty(BtsProperties.AckRequired, true)).Should().NotThrow();
-			Action(() => context.Object.SetProperty(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
-			Action(() => context.Object.SetProperty(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.AckRequired, true)).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
 
 			context.Verify(c => c.SetProperty(BtsProperties.AckRequired, true));
 			context.Verify(c => c.SetProperty(BtsProperties.ActualRetryCount, 10));
@@ -718,9 +718,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.SetProperty(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.SetProperty(BtsProperties.SendPortName, "send-port-name"));
 
-			Action(() => context.Object.SetProperty(BtsProperties.AckRequired, true)).Should().NotThrow();
-			Action(() => context.Object.SetProperty(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
-			Action(() => context.Object.SetProperty(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.AckRequired, true)).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.ActualRetryCount, 10)).Should().NotThrow();
+			Invoking(() => context.Object.SetProperty(BtsProperties.SendPortName, "send-port-name")).Should().NotThrow();
 
 			context.Verify(c => c.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true));
 			context.Verify(c => c.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10));
@@ -735,9 +735,9 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Setup(c => c.SetProperty(BtsProperties.ActualRetryCount, 10));
 			context.Setup(c => c.SetProperty(BtsProperties.SendPortName, "send-port-name"));
 
-			Action(() => context.Object.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true)).Should().NotThrow();
-			Action(() => context.Object.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10)).Should().NotThrow();
-			Action(() => context.Object.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name")).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.AckRequired.Name, BtsProperties.AckRequired.Namespace, true)).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.ActualRetryCount.Name, BtsProperties.ActualRetryCount.Namespace, 10)).Should().NotThrow();
+			Invoking(() => context.Object.Write(BtsProperties.SendPortName.Name, BtsProperties.SendPortName.Namespace, "send-port-name")).Should().NotThrow();
 
 			context.Verify(c => c.SetProperty(BtsProperties.AckRequired, true));
 			context.Verify(c => c.SetProperty(BtsProperties.ActualRetryCount, 10));
@@ -770,7 +770,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			context.Object.GetProperty(BtsProperties.ActualRetryCount);
 			context.Object.GetProperty(BtsProperties.AckRequired);
 
-			Action(() => context.Verify())
+			Invoking(() => context.Verify())
 				.Should().Throw<MockException>()
 				.Where(
 					e => Regex.IsMatch(

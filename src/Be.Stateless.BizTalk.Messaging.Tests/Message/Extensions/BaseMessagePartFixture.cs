@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ using Microsoft.BizTalk.Message.Interop;
 using Microsoft.BizTalk.Streaming;
 using Moq;
 using Xunit;
+using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Message.Extensions
 {
@@ -45,15 +46,15 @@ namespace Be.Stateless.BizTalk.Message.Extensions
 		[Fact]
 		public void SetDataStreamThrowsIfNullArguments()
 		{
-			Action act = () => ((IBaseMessagePart) null).SetDataStream(null, null);
-			act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("messagePart");
+			Invoking(() => ((IBaseMessagePart) null).SetDataStream(null, null))
+				.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("messagePart");
 
 			var part = new Mock<IBaseMessagePart>().SetupAllProperties();
-			act = () => part.Object.SetDataStream(null, null);
-			act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("stream");
+			Invoking(() => part.Object.SetDataStream(null, null))
+				.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("stream");
 
-			act = () => part.Object.SetDataStream(new MemoryStream(), null);
-			act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("tracker");
+			Invoking(() => part.Object.SetDataStream(new MemoryStream(), null))
+				.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("tracker");
 		}
 
 		[Fact]
@@ -93,15 +94,15 @@ namespace Be.Stateless.BizTalk.Message.Extensions
 		[Fact]
 		public void WrapOriginalDataStreamThrowsIfNullArguments()
 		{
-			Action act = () => ((IBaseMessagePart) null).WrapOriginalDataStream<System.IO.Stream>(null, null);
-			act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("messagePart");
+			Invoking(() => ((IBaseMessagePart) null).WrapOriginalDataStream<System.IO.Stream>(null, null))
+				.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("messagePart");
 
 			var part = new Mock<IBaseMessagePart>().SetupAllProperties();
-			act = () => part.Object.WrapOriginalDataStream<System.IO.Stream>(null, null);
-			act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("wrapper");
+			Invoking(() => part.Object.WrapOriginalDataStream<System.IO.Stream>(null, null))
+				.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("wrapper");
 
-			act = () => part.Object.WrapOriginalDataStream(s => new MarkableForwardOnlyEventingReadStream(s), null);
-			act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("tracker");
+			Invoking(() => part.Object.WrapOriginalDataStream(s => new MarkableForwardOnlyEventingReadStream(s), null))
+				.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("tracker");
 		}
 	}
 }
