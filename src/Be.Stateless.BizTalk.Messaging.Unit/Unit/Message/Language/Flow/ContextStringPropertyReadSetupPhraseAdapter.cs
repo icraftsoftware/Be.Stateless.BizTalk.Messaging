@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Language.Flow
 			return this;
 		}
 
-		public IReturnsThrows<TMock, string> Callback(System.Delegate callback)
+		public IReturnsThrows<TMock, string> Callback(Delegate callback)
 		{
 			_setupImplementation.Callback(callback);
 			return this;
@@ -160,7 +160,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Language.Flow
 			return _setupImplementation.Returns(valueFunction);
 		}
 
-		public IReturnsResult<TMock> Returns(System.Delegate valueFunction)
+		public IReturnsResult<TMock> Returns(Delegate valueFunction)
 		{
 			return _setupImplementation.Returns(valueFunction);
 		}

@@ -1,13 +1,13 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
-//
+// Copyright © 2012 - 2021 François Chabot
+// 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-//
+// 
 // http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,7 +43,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Language.Flow
 			return new ContextMethodCallReturn<TMock>(_contextFunctionCallSetupImplementation.Returns(valueFunction));
 		}
 
-		public IReturnsResult<TMock> Returns(System.Delegate valueFunction)
+		public IReturnsResult<TMock> Returns(Delegate valueFunction)
 		{
 			return new ContextMethodCallReturn<TMock>(_contextFunctionCallSetupImplementation.Returns(valueFunction));
 		}
@@ -167,7 +167,7 @@ namespace Be.Stateless.BizTalk.Unit.Message.Language.Flow
 			return new ContextFunctionCallReturn<TMock, TResult>(_contextFunctionCallSetupImplementation.Callback(action));
 		}
 
-		public IReturnsThrows<TMock, TResult> Callback(System.Delegate callback)
+		public IReturnsThrows<TMock, TResult> Callback(Delegate callback)
 		{
 			return new ContextFunctionCallReturn<TMock, TResult>(_contextFunctionCallSetupImplementation.Callback(callback));
 		}

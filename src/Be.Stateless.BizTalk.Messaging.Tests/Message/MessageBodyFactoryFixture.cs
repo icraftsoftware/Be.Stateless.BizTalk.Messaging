@@ -29,6 +29,7 @@ namespace Be.Stateless.BizTalk.Message
 {
 	public class MessageBodyFactoryFixture
 	{
+		[SuppressMessage("ReSharper", "StringLiteralTypo")]
 		[Fact]
 		public void CreateEnvelopeWithContent()
 		{
@@ -47,7 +48,7 @@ namespace Be.Stateless.BizTalk.Message
 		[Fact]
 		public void CreatingMessageBodyBySchemaTypeNeverThrows()
 		{
-			Invoking(() => MessageBodyFactory.Create<soap_envelope_1__2.Envelope>()).Should().NotThrow();
+			Invoking(MessageBodyFactory.Create<soap_envelope_1__2.Envelope>).Should().NotThrow();
 		}
 
 		[Fact]

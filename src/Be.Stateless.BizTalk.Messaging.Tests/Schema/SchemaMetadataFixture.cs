@@ -105,7 +105,7 @@ namespace Be.Stateless.BizTalk.Schema
 		[Fact]
 		public void ForThrowsForPropertySchema()
 		{
-			Invoking(() => SchemaMetadata.For<Schemas.BizTalkFactory.Properties>())
+			Invoking(SchemaMetadata.For<Schemas.BizTalkFactory.Properties>)
 				.Should().Throw<ArgumentException>()
 				.WithMessage("SchemaMetadata only supports schemas qualified with a SchemaTypeAttribute whose Type is equal to Document*");
 		}

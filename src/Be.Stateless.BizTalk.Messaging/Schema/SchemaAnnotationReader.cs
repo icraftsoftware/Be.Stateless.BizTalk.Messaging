@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -57,14 +58,14 @@ namespace Be.Stateless.BizTalk.Schema
 
 		private SchemaAnnotationReader(ISchemaMetadata schemaMetadata)
 		{
-			_schemaMetadata = schemaMetadata;
+			SchemaMetadata = schemaMetadata;
 		}
 
 		#region ISchemaAnnotationReader Members
 
 		public XElement GetAnnotationElement(string annotationElementLocalName)
 		{
-			var schema = (SchemaBase) Activator.CreateInstance(_schemaMetadata.Type);
+			var schema = (SchemaBase) Activator.CreateInstance(SchemaMetadata.Type);
 			using (var stringReader = new StringReader(schema.XmlContent))
 			{
 				var document = XDocument.Load(stringReader);
@@ -72,7 +73,7 @@ namespace Be.Stateless.BizTalk.Schema
 				namespaceManager.AddNamespace("xs", XmlSchema.Namespace);
 				namespaceManager.AddNamespace("san", SchemaAnnotationCollection.NAMESPACE);
 				var annotationXmlElements = document.XPathSelectElements(
-					$"/*/xs:element[@name='{_schemaMetadata.RootElementName}']/xs:annotation/xs:appinfo/san:*",
+					$"/*/xs:element[@name='{SchemaMetadata.RootElementName}']/xs:annotation/xs:appinfo/san:*",
 					namespaceManager);
 				return annotationXmlElements.SingleOrDefault(e => e.Name.LocalName == annotationElementLocalName);
 			}
@@ -80,7 +81,9 @@ namespace Be.Stateless.BizTalk.Schema
 
 		#endregion
 
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API.")]
+		public ISchemaMetadata SchemaMetadata { get; }
+
 		public static readonly ISchemaAnnotationReader Empty = new EmptySchemaAnnotationReader();
-		private readonly ISchemaMetadata _schemaMetadata;
 	}
 }
