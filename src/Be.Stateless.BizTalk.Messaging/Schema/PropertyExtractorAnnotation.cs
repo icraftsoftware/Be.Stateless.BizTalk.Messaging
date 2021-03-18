@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,11 +23,11 @@ using Microsoft.BizTalk.Message.Interop;
 
 namespace Be.Stateless.BizTalk.Schema
 {
-	public class ContextPropertyAnnotation : ISchemaAnnotation<ContextPropertyAnnotation>
+	public class PropertyExtractorAnnotation : ISchemaAnnotation<PropertyExtractorAnnotation>
 	{
-		#region ISchemaAnnotation<ContextPropertyAnnotation> Members
+		#region ISchemaAnnotation<PropertyExtractorAnnotation> Members
 
-		public ContextPropertyAnnotation Build(ISchemaAnnotationReader schemaAnnotationReader)
+		public PropertyExtractorAnnotation Build(ISchemaAnnotationReader schemaAnnotationReader)
 		{
 			if (schemaAnnotationReader == null) throw new ArgumentNullException(nameof(schemaAnnotationReader));
 			Extractors = schemaAnnotationReader.GetAnnotationElement("Properties").IfNotNull(

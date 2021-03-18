@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,12 +21,12 @@ using Be.Stateless.BizTalk.Schema.Annotation;
 
 namespace Be.Stateless.BizTalk.Schema.Extensions
 {
-	public static class ContextPropertyAnnotationExtensions
+	public static class PropertyExtractorAnnotationExtensions
 	{
-		public static PropertyExtractorCollection GetExtractors(this ISchemaMetadata schemaMetadata)
+		public static PropertyExtractorCollection GetPropertyExtractors(this ISchemaMetadata schemaMetadata)
 		{
 			if (schemaMetadata == null) throw new ArgumentNullException(nameof(schemaMetadata));
-			return schemaMetadata.Annotations.Find<ContextPropertyAnnotation>().Extractors;
+			return schemaMetadata.Annotations.Find<PropertyExtractorAnnotation>().Extractors;
 		}
 	}
 }

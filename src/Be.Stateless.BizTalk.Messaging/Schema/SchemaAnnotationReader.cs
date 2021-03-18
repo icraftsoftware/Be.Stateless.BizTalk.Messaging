@@ -17,7 +17,6 @@
 #endregion
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -28,13 +27,20 @@ using Microsoft.XLANGs.BaseTypes;
 
 namespace Be.Stateless.BizTalk.Schema
 {
-	public class SchemaAnnotationReader : ISchemaAnnotationReader
+	internal class SchemaAnnotationReader : ISchemaAnnotationReader
 	{
 		#region Nested Type: EmptySchemaAnnotationReader
 
 		internal class EmptySchemaAnnotationReader : ISchemaAnnotationReader
 		{
+			internal EmptySchemaAnnotationReader(ISchemaMetadata schemaMetadata)
+			{
+				SchemaMetadata = schemaMetadata;
+			}
+
 			#region ISchemaAnnotationReader Members
+
+			public ISchemaMetadata SchemaMetadata { get; }
 
 			public XElement GetAnnotationElement(string annotationElementLocalName)
 			{
@@ -52,7 +58,7 @@ namespace Be.Stateless.BizTalk.Schema
 			return schemaMetadata is SchemaMetadata.RootlessSchemaMetadata
 				|| schemaMetadata is SchemaMetadata.UnknownSchemaMetadata
 				|| schemaMetadata.Type.Assembly.FullName.StartsWith("Microsoft.", StringComparison.Ordinal)
-					? Empty
+					? (ISchemaAnnotationReader) new EmptySchemaAnnotationReader(schemaMetadata)
 					: new SchemaAnnotationReader(schemaMetadata);
 		}
 
@@ -62,6 +68,8 @@ namespace Be.Stateless.BizTalk.Schema
 		}
 
 		#region ISchemaAnnotationReader Members
+
+		public ISchemaMetadata SchemaMetadata { get; }
 
 		public XElement GetAnnotationElement(string annotationElementLocalName)
 		{
@@ -80,10 +88,5 @@ namespace Be.Stateless.BizTalk.Schema
 		}
 
 		#endregion
-
-		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Public API.")]
-		public ISchemaMetadata SchemaMetadata { get; }
-
-		public static readonly ISchemaAnnotationReader Empty = new EmptySchemaAnnotationReader();
 	}
 }

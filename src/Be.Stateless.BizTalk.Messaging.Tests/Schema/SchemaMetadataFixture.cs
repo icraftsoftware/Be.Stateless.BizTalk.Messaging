@@ -31,15 +31,15 @@ namespace Be.Stateless.BizTalk.Schema
 	public class SchemaMetadataFixture
 	{
 		[Fact]
-		public void AnnotationsReturnsEmptySchemaAnnotationCollectionForRootlessSchemaMetadata()
+		public void AnnotationsReturnsSchemaAnnotationCollectionForForRootlessSchemaMetadata()
 		{
-			SchemaMetadata.For<RootlessSchema>().Annotations.Should().BeSameAs(SchemaAnnotationCollection.Empty);
+			SchemaMetadata.For<RootlessSchema>().Annotations.Should().BeOfType<SchemaAnnotationCollection>();
 		}
 
 		[Fact]
-		public void AnnotationsReturnsEmptySchemaAnnotationCollectionForUnknownSchemaMetadata()
+		public void AnnotationsReturnsSchemaAnnotationCollectionForForUnknownSchemaMetadata()
 		{
-			SchemaMetadata.For(typeof(string)).Annotations.Should().BeSameAs(SchemaAnnotationCollection.Empty);
+			SchemaMetadata.For(typeof(string)).Annotations.Should().BeOfType<SchemaAnnotationCollection>();
 		}
 
 		[Fact]
@@ -100,6 +100,7 @@ namespace Be.Stateless.BizTalk.Schema
 		public void ForReturnsUnknownSchemaMetadata()
 		{
 			SchemaMetadata.For(null).Should().BeOfType<SchemaMetadata.UnknownSchemaMetadata>();
+			SchemaMetadata.For(typeof(string)).Should().BeOfType<SchemaMetadata.UnknownSchemaMetadata>();
 		}
 
 		[Fact]

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -83,11 +83,12 @@ namespace Be.Stateless.BizTalk.Schema
 
 				var schemaBase = (SchemaBase) Activator.CreateInstance(type);
 				TargetNamespace = schemaBase.Schema.TargetNamespace;
+				_annotations = new Lazy<ISchemaAnnotationCollection>(() => SchemaAnnotationCollection.Create(this));
 			}
 
 			#region ISchemaMetadata Members
 
-			public ISchemaAnnotationCollection Annotations => SchemaAnnotationCollection.Empty;
+			public ISchemaAnnotationCollection Annotations => _annotations.Value;
 
 			public string BodyXPath => string.Empty;
 
@@ -104,6 +105,8 @@ namespace Be.Stateless.BizTalk.Schema
 			public Type Type { get; }
 
 			#endregion
+
+			private readonly Lazy<ISchemaAnnotationCollection> _annotations;
 		}
 
 		#endregion
@@ -112,9 +115,14 @@ namespace Be.Stateless.BizTalk.Schema
 
 		internal class UnknownSchemaMetadata : ISchemaMetadata
 		{
+			internal UnknownSchemaMetadata()
+			{
+				_annotations = new Lazy<ISchemaAnnotationCollection>(() => SchemaAnnotationCollection.Create(this));
+			}
+
 			#region ISchemaMetadata Members
 
-			public ISchemaAnnotationCollection Annotations => SchemaAnnotationCollection.Empty;
+			public ISchemaAnnotationCollection Annotations => _annotations.Value;
 
 			public string BodyXPath => string.Empty;
 
@@ -131,6 +139,8 @@ namespace Be.Stateless.BizTalk.Schema
 			public Type Type => null;
 
 			#endregion
+
+			private readonly Lazy<ISchemaAnnotationCollection> _annotations;
 		}
 
 		#endregion

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,14 +24,14 @@ using Moq;
 namespace Be.Stateless.BizTalk.Unit.Schema
 {
 	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public API.")]
-	public class ContextPropertyAnnotationMockInjectionScope : SchemaMetadataMockInjectionScope
+	public class PropertyExtractorAnnotationMockInjectionScope : SchemaMetadataMockInjectionScope
 	{
-		public ContextPropertyAnnotationMockInjectionScope()
+		public PropertyExtractorAnnotationMockInjectionScope()
 		{
 			var schemaAnnotationMock = new Mock<ISchemaAnnotationCollection>();
 			schemaAnnotationMock
-				.Setup(sa => sa.Find<ContextPropertyAnnotation>())
-				.Returns(() => new ContextPropertyAnnotation { Extractors = Extractors });
+				.Setup(sa => sa.Find<PropertyExtractorAnnotation>())
+				.Returns(() => new PropertyExtractorAnnotation { Extractors = Extractors });
 			Mock.Setup(smd => smd.Annotations).Returns(schemaAnnotationMock.Object);
 		}
 
