@@ -79,7 +79,7 @@ namespace Be.Stateless.BizTalk.Schema
 				var document = XDocument.Load(stringReader);
 				var namespaceManager = new XmlNamespaceManager(new NameTable());
 				namespaceManager.AddNamespace("xs", XmlSchema.Namespace);
-				namespaceManager.AddNamespace("san", SchemaAnnotationCollection.NAMESPACE);
+				namespaceManager.AddNamespace("san", SchemaAnnotation.NAMESPACE);
 				var annotationXmlElements = document.XPathSelectElements(
 					$"/*/xs:element[@name='{SchemaMetadata.RootElementName}']/xs:annotation/xs:appinfo/san:*",
 					namespaceManager);

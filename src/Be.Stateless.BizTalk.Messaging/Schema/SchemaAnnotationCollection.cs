@@ -21,7 +21,7 @@ using System.Collections.Generic;
 
 namespace Be.Stateless.BizTalk.Schema
 {
-	internal class SchemaAnnotationCollection : ISchemaAnnotationCollection
+	public class SchemaAnnotationCollection : ISchemaAnnotationCollection
 	{
 		internal static ISchemaAnnotationCollection Create(ISchemaMetadata schemaMetadata)
 		{
@@ -51,7 +51,6 @@ namespace Be.Stateless.BizTalk.Schema
 
 		#endregion
 
-		public const string NAMESPACE = "urn:schemas.stateless.be:biztalk:annotations:2013:01";
 		private readonly Dictionary<Type, object> _annotationObjects;
 		private readonly Func<ISchemaAnnotationReader> _schemaAnnotationReaderFactory;
 	}
