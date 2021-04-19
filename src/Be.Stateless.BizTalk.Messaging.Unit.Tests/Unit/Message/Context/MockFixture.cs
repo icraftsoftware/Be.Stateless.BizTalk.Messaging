@@ -145,10 +145,10 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 
 			var context = new Mock<IBaseMessageContext>(MockBehavior.Strict);
 			context.Setup(c => c.GetProperty(BtsProperties.ReceiveLocationName))
-				.Callback((string n, string ns) => callbackCount += n == BtsProperties.ReceiveLocationName.Name ? 1 : -1)
+				.Callback((string n, string _) => callbackCount += n == BtsProperties.ReceiveLocationName.Name ? 1 : -1)
 				.Returns("receive-location-name");
 			context.Setup(c => c.GetProperty(BtsProperties.SendPortName))
-				.Callback((string n, string ns) => callbackCount += n == BtsProperties.SendPortName.Name ? 1 : -1)
+				.Callback((string n, string _) => callbackCount += n == BtsProperties.SendPortName.Name ? 1 : -1)
 				.Returns(() => "send-port-name");
 
 			Invoking(() => context.Object.GetProperty(BtsProperties.ReceiveLocationName)).Should().NotThrow();

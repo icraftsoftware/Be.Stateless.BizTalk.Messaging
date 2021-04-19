@@ -50,7 +50,7 @@ namespace Be.Stateless.BizTalk.Schema
 
 			public string BodyXPath => Microsoft.XLANGs.RuntimeTypes.SchemaMetadata.For(Type).BodyXPath ?? string.Empty;
 
-			public DocumentSpec DocumentSpec => new DocumentSpec(Type.FullName, Type.Assembly.FullName);
+			public DocumentSpec DocumentSpec => new(Type.FullName, Type.Assembly.FullName);
 
 			public bool IsEnvelopeSchema => !BodyXPath.IsNullOrEmpty();
 
@@ -149,7 +149,7 @@ namespace Be.Stateless.BizTalk.Schema
 		{
 			if (!type.IsSchema()) throw new ArgumentException("Type is not a SchemaBase derived Type instance.", nameof(type));
 			return type.IsSchemaRoot()
-				? (ISchemaMetadata) new RootedSchemaMetadata(type)
+				? new RootedSchemaMetadata(type)
 				: new RootlessSchemaMetadata(type);
 		}
 

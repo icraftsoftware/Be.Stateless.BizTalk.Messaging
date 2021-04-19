@@ -79,7 +79,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 
 			#endregion
 
-			internal static readonly EmptyPropertyExtractorCollection Instance = new EmptyPropertyExtractorCollection();
+			internal static readonly EmptyPropertyExtractorCollection Instance = new();
 		}
 
 		#endregion
@@ -89,7 +89,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		[SuppressMessage("Usage", "CA2225:Operator overloads have named alternates")]
 		public static implicit operator PropertyExtractorCollection(PropertyExtractor[] extractors)
 		{
-			return new PropertyExtractorCollection(extractors);
+			return new(extractors);
 		}
 
 		#endregion

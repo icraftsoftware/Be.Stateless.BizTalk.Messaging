@@ -55,10 +55,9 @@ namespace Be.Stateless.BizTalk.Schema
 		internal static ISchemaAnnotationReader Create(ISchemaMetadata schemaMetadata)
 		{
 			if (schemaMetadata == null) throw new ArgumentNullException(nameof(schemaMetadata));
-			return schemaMetadata is SchemaMetadata.RootlessSchemaMetadata
-				|| schemaMetadata is SchemaMetadata.UnknownSchemaMetadata
+			return schemaMetadata is Schema.SchemaMetadata.RootlessSchemaMetadata or Schema.SchemaMetadata.UnknownSchemaMetadata
 				|| schemaMetadata.Type.Assembly.FullName.StartsWith("Microsoft.", StringComparison.Ordinal)
-					? (ISchemaAnnotationReader) new EmptySchemaAnnotationReader(schemaMetadata)
+					? new EmptySchemaAnnotationReader(schemaMetadata)
 					: new SchemaAnnotationReader(schemaMetadata);
 		}
 
