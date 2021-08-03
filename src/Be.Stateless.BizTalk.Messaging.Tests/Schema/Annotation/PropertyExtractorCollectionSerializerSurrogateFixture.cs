@@ -37,7 +37,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 
 			using (var reader = XmlReader.Create(new StringReader(xml)))
 			{
-				var sut = new PropertyExtractorCollectionSerializerSurrogate(new PropertyExtractorCollection());
+				var sut = new PropertyExtractorCollectionSerializerSurrogate(new());
 				sut.ReadXml(reader);
 				sut.Precedence.Should().Be(ExtractorPrecedence.SchemaOnly);
 			}
@@ -51,10 +51,10 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 				+ "</s0:Properties>";
 
 			var builder = new StringBuilder();
-			using (var writer = XmlWriter.Create(builder, new XmlWriterSettings { OmitXmlDeclaration = true }))
+			using (var writer = XmlWriter.Create(builder, new() { OmitXmlDeclaration = true }))
 			{
 				var sut = new PropertyExtractorCollectionSerializerSurrogate(
-					new PropertyExtractorCollection(
+					new(
 						ExtractorPrecedence.PipelineOnly,
 						new XPathExtractor(new XmlQualifiedName("Property1", "urn"), "*/some-node")));
 				sut.WriteXml(writer!);

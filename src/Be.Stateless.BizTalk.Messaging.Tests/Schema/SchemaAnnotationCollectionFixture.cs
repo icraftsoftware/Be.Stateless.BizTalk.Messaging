@@ -88,7 +88,7 @@ namespace Be.Stateless.BizTalk.Schema
 
 			public AnnotationDummy()
 			{
-				AnnotationDummySpy = new Mock<ISchemaAnnotation<AnnotationDummy>>();
+				AnnotationDummySpy = new();
 				AnnotationDummySpy
 					.Setup(ads => ads.Build(It.IsAny<ISchemaAnnotationReader>()))
 					.Returns(new AnnotationDummy(true));

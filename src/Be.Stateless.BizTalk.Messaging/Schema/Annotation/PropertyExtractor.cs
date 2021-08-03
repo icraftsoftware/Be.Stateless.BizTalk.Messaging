@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 
 		public PropertyExtractor(XmlQualifiedName propertyName, ExtractionMode extractionMode)
 		{
-			if (GetType() == typeof(PropertyExtractor) && !(extractionMode == ExtractionMode.Clear || extractionMode == ExtractionMode.Ignore))
+			if (GetType() == typeof(PropertyExtractor) && extractionMode is not (ExtractionMode.Clear or ExtractionMode.Ignore))
 				throw new ArgumentException(
 					"Invalid ExtractionMode, only Clear and Ignore are supported for PropertyExtractor without a Value or an XPath.",
 					nameof(extractionMode));

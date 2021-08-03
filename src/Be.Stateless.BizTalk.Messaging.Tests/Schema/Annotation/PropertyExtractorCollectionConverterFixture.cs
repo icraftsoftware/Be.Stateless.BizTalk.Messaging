@@ -52,9 +52,10 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			sut.ConvertFrom(xml)
 				.Should().BeOfType<PropertyExtractorCollection>()
 				.Which.Should().BeEquivalentTo(
-					new XPathExtractor(new XmlQualifiedName("Property1", "urn"), "*/some-node", ExtractionMode.Write),
-					new XPathExtractor(new XmlQualifiedName("Property2", "urn"), "*/other-node", ExtractionMode.Promote)
-				);
+					new[] {
+						new XPathExtractor(new XmlQualifiedName("Property1", "urn"), "*/some-node", ExtractionMode.Write),
+						new XPathExtractor(new XmlQualifiedName("Property2", "urn"), "*/other-node", ExtractionMode.Promote)
+					});
 		}
 
 		[Fact]

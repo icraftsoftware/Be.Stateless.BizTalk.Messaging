@@ -41,7 +41,7 @@ namespace Be.Stateless.BizTalk.Schema
 			internal RootedSchemaMetadata(Type type)
 			{
 				Type = type ?? throw new ArgumentNullException(nameof(type));
-				_annotations = new Lazy<ISchemaAnnotationCollection>(() => SchemaAnnotationCollection.Create(this));
+				_annotations = new(() => SchemaAnnotationCollection.Create(this));
 			}
 
 			#region ISchemaMetadata Members
@@ -83,7 +83,7 @@ namespace Be.Stateless.BizTalk.Schema
 
 				var schemaBase = (SchemaBase) Activator.CreateInstance(type);
 				TargetNamespace = schemaBase.Schema.TargetNamespace;
-				_annotations = new Lazy<ISchemaAnnotationCollection>(() => SchemaAnnotationCollection.Create(this));
+				_annotations = new(() => SchemaAnnotationCollection.Create(this));
 			}
 
 			#region ISchemaMetadata Members
@@ -117,7 +117,7 @@ namespace Be.Stateless.BizTalk.Schema
 		{
 			internal UnknownSchemaMetadata()
 			{
-				_annotations = new Lazy<ISchemaAnnotationCollection>(() => SchemaAnnotationCollection.Create(this));
+				_annotations = new(() => SchemaAnnotationCollection.Create(this));
 			}
 
 			#region ISchemaMetadata Members

@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,6 +33,15 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 	[SuppressMessage("ReSharper", "RedundantArgumentDefaultValue")]
 	public class ReactiveXPathExtractorCollectionFixture
 	{
+		#region Setup/Teardown
+
+		public ReactiveXPathExtractorCollectionFixture()
+		{
+			MessageContextMock = new();
+		}
+
+		#endregion
+
 		[Fact]
 		public void Match()
 		{
@@ -155,11 +164,6 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.ContextBuilderTypeName, "paragraph-one"));
 			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.OutboundTransportLocation, "paragraph-six"));
 			MessageContextMock.Verify(c => c.SetProperty(BizTalkFactoryProperties.MapTypeName, "paragraph-two"));
-		}
-
-		public ReactiveXPathExtractorCollectionFixture()
-		{
-			MessageContextMock = new MessageContextMock();
 		}
 
 		private MessageContextMock MessageContextMock { get; }

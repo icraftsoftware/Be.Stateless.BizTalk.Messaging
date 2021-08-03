@@ -39,7 +39,7 @@ namespace Be.Stateless.BizTalk.Stream
 			if (messageContextAccessor == null) throw new ArgumentNullException(nameof(messageContextAccessor));
 
 			var reactiveExtractorCollection = new ReactiveXPathExtractorCollection(extractors, messageContextAccessor);
-			return new XPathMutatorStream(stream, reactiveExtractorCollection, reactiveExtractorCollection.OnMatch);
+			return new(stream, reactiveExtractorCollection, reactiveExtractorCollection.OnMatch);
 		}
 	}
 }

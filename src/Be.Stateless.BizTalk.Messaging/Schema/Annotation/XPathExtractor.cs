@@ -52,7 +52,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 		public XPathExtractor(XmlQualifiedName propertyName, string xpathExpression, ExtractionMode extractionMode = ExtractionMode.Write)
 			: base(propertyName, extractionMode)
 		{
-			XPathExpression = new XPathExpression(xpathExpression);
+			XPathExpression = new(xpathExpression);
 		}
 
 		public XPathExtractor(IMessageContextProperty property, string xpathExpression, ExtractionMode extractionMode = ExtractionMode.Write)

@@ -59,7 +59,7 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 								string.Join(">, <", extractorGroup.Select(eg => eg.PropertyName.ToString()).ToArray()),
 								extractorGroup.Key);
 						var index = Add(extractorGroup.Key);
-						_xpathMatches.Insert(index, new XPathMatch { Extractors = extractorGroup });
+						_xpathMatches.Insert(index, new() { Extractors = extractorGroup });
 					});
 			_messageContextAccessor = messageContextAccessor;
 		}

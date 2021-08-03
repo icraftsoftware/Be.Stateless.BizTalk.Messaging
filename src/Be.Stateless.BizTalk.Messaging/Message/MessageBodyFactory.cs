@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ namespace Be.Stateless.BizTalk.Message
 		[SuppressMessage("ReSharper", "UnusedMethodReturnValue.Global", Justification = "Public API.")]
 		public static XmlDocument Create<T>(string content) where T : SchemaBase, new()
 		{
-			using (var reader = XmlReader.Create(new StringReader(content), new XmlReaderSettings { XmlResolver = null }))
+			using (var reader = XmlReader.Create(new StringReader(content), new() { XmlResolver = null }))
 			using (var xmlReader = ValidatingXmlReader.Create<T>(reader))
 			{
 				var message = new XmlDocument { XmlResolver = null };
@@ -107,7 +107,7 @@ namespace Be.Stateless.BizTalk.Message
 			where TE : SchemaBase, new()
 			where TC : SchemaBase, new()
 		{
-			using (var reader = XmlReader.Create(new StringReader(content), new XmlReaderSettings { XmlResolver = null }))
+			using (var reader = XmlReader.Create(new StringReader(content), new() { XmlResolver = null }))
 			using (var xmlReader = ValidatingXmlReader.Create<TE, TC>(reader))
 			{
 				var message = new XmlDocument { XmlResolver = null };
@@ -130,7 +130,7 @@ namespace Be.Stateless.BizTalk.Message
 		private static XmlDocument Create(DocumentSpec documentSpec)
 		{
 			using (var writer = new StringWriter())
-			using (var reader = XmlReader.Create(documentSpec.CreateXmlInstance(writer), new XmlReaderSettings { CloseInput = true, XmlResolver = null }))
+			using (var reader = XmlReader.Create(documentSpec.CreateXmlInstance(writer), new() { CloseInput = true, XmlResolver = null }))
 			{
 				var document = new XmlDocument { XmlResolver = null };
 				document.Load(reader);

@@ -31,7 +31,7 @@ namespace Be.Stateless.BizTalk.Unit.Schema
 			var schemaAnnotationMock = new Mock<ISchemaAnnotationCollection>();
 			schemaAnnotationMock
 				.Setup(sa => sa.Find<PropertyExtractorAnnotation>())
-				.Returns(() => new PropertyExtractorAnnotation { Extractors = Extractors });
+				.Returns(() => new() { Extractors = Extractors });
 			Mock.Setup(smd => smd.Annotations).Returns(schemaAnnotationMock.Object);
 		}
 

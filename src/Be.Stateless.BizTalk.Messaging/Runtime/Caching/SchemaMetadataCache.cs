@@ -18,6 +18,7 @@
 
 using System;
 using Be.Stateless.BizTalk.Schema;
+using Be.Stateless.Runtime.Caching;
 using Microsoft.XLANGs.BaseTypes;
 
 namespace Be.Stateless.BizTalk.Runtime.Caching

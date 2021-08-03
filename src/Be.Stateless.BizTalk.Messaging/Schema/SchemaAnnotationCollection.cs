@@ -32,7 +32,7 @@ namespace Be.Stateless.BizTalk.Schema
 		private SchemaAnnotationCollection(Func<ISchemaAnnotationReader> schemaAnnotationReaderFactory)
 		{
 			_schemaAnnotationReaderFactory = schemaAnnotationReaderFactory;
-			_annotationObjects = new Dictionary<Type, object>(3);
+			_annotationObjects = new(3);
 		}
 
 		#region ISchemaAnnotationCollection Members
