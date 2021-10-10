@@ -23,7 +23,6 @@ using Moq;
 
 namespace Be.Stateless.BizTalk.Unit.Schema
 {
-	[SuppressMessage("Design", "CA1063:Implement IDisposable Correctly")]
 	[SuppressMessage("ReSharper", "MemberCanBeProtected.Global", Justification = "Public API.")]
 	[SuppressMessage("ReSharper", "UnusedType.Global", Justification = "Public API.")]
 	public class SchemaMetadataMockInjectionScope : IDisposable
@@ -37,7 +36,6 @@ namespace Be.Stateless.BizTalk.Unit.Schema
 
 		#region IDisposable Members
 
-		[SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize")]
 		public void Dispose()
 		{
 			SchemaMetadata.SchemaMetadataFactory = _schemaMetadataFactory;

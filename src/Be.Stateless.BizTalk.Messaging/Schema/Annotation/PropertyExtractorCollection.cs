@@ -86,7 +86,6 @@ namespace Be.Stateless.BizTalk.Schema.Annotation
 
 		#region Operators
 
-		[SuppressMessage("Usage", "CA2225:Operator overloads have named alternates")]
 		public static implicit operator PropertyExtractorCollection(PropertyExtractor[] extractors)
 		{
 			return new(extractors);

@@ -78,7 +78,6 @@ namespace Be.Stateless.BizTalk.Message
 		/// <returns>
 		/// The dummy instance document as an <see cref="XmlDocument"/>.
 		/// </returns>
-		[SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Done by .IsSchema() extension method.")]
 		[SuppressMessage("ReSharper", "UnusedMethodReturnValue.Global", Justification = "Public API.")]
 		public static XmlDocument Create(Type schema)
 		{

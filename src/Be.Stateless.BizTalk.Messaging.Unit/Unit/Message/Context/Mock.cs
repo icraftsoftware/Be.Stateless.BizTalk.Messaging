@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -43,7 +43,6 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 	/// <seealso cref="BaseMessageContext.SetProperty{T,TV}(IBaseMessageContext,MessageContextProperty{T,TV},TV)"/>
 	/// <seealso cref="BaseMessageContext.Promote{T}(IBaseMessageContext,MessageContextProperty{T,string},string)"/>
 	/// <seealso cref="BaseMessageContext.Promote{T,TV}(IBaseMessageContext,MessageContextProperty{T,TV},TV)"/>
-	[SuppressMessage("Design", "CA1062:Validate arguments of public methods")]
 	[SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
 	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Public API.")]
 	public class Mock<TMock> : Moq.Mock<TMock> where TMock : class, IBaseMessageContext
@@ -52,7 +51,6 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 
 		public Mock(MockBehavior behavior) : base(behavior) { }
 
-		[SuppressMessage("Design", "CA1062:Validate arguments of public methods")]
 		public ISetup<TMock> Setup(Expression<Action<IBaseMessageContext>> expression)
 		{
 			// intercept setup
@@ -178,7 +176,6 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			}
 		}
 
-		[SuppressMessage("Performance", "CA1822:Mark members as static")]
 		internal XmlQualifiedName GetContextPropertyXmlQualifiedName(MethodCallExpression methodCallExpression)
 		{
 			var propertyArgument = methodCallExpression.Arguments[1];
@@ -202,7 +199,6 @@ namespace Be.Stateless.BizTalk.Unit.Message.Context
 			};
 		}
 
-		[SuppressMessage("Performance", "CA1822:Mark members as static")]
 		private Expression<Action<TMock>> RewriteExpression(Expression<Action<TMock>> expressionTemplate, XmlQualifiedName qualifiedName, Expression valueExpression)
 		{
 			var mce = (MethodCallExpression) expressionTemplate.Body;
