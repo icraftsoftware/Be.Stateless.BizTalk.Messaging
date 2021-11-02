@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2020 François Chabot
+// Copyright © 2012 - 2021 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 #endregion
 
-using System.Diagnostics.CodeAnalysis;
+using System;
 using Be.Stateless.BizTalk.ContextProperties;
 using FluentAssertions;
 using Microsoft.BizTalk.Message.Interop;
@@ -27,51 +27,52 @@ namespace Be.Stateless.BizTalk.Message.Extensions
 {
 	public class BaseMessageContextFixture
 	{
-		[Fact]
-		[SuppressMessage("ReSharper", "StringLiteralTypo")]
-		public void SerializeContextToXml()
+		[Theory]
+		[InlineData("Authorization: Bearer b3@r3r")]
+		[InlineData("Content-Type: application/xml\nAuthorization: Bearer b3@r3r\nAccept: application/xml")]
+		[InlineData("Content-Type: application/xml\rAuthorization: Bearer b3@r3r\rAccept: application/xml")]
+		[InlineData("Content-Type: application/xml\r\nAuthorization: Bearer b3@r3r\r\nAccept: application/xml")]
+		public void SerializeContextToXml(string httpHeaders)
 		{
-			var name = BtsProperties.OutboundTransportLocation.Name;
-			var ns = BtsProperties.OutboundTransportLocation.Namespace;
-
 			var context = new Mock<IBaseMessageContext>();
-			context
-				.Setup(c => c.ReadAt(0, out name, out ns))
-				.Returns(@"file://c:\files\ports\out");
 
-			name = BtsProperties.OutboundTransportType.Name;
-			ns = BtsProperties.OutboundTransportType.Namespace;
-			context
-				.Setup(c => c.ReadAt(1, out name, out ns))
-				.Returns("FILE");
-			context
-				.Setup(c => c.IsPromoted(name, ns))
-				.Returns(true);
+			var (name, ns) = (BtsProperties.OutboundTransportLocation.Name, BtsProperties.OutboundTransportLocation.Namespace);
+			context.Setup(c => c.ReadAt(0, out name, out ns)).Returns(@"file://c:\folder\ports\out");
 
-			name = new FILE.Password().Name.Name;
-			ns = new FILE.Password().Name.Namespace;
-			context
-				.Setup(c => c.ReadAt(2, out name, out ns))
-				.Returns("p@ssw0rd");
+			(name, ns) = (BtsProperties.OutboundTransportType.Name, BtsProperties.OutboundTransportType.Namespace);
+			context.Setup(c => c.ReadAt(1, out name, out ns)).Returns("FILE");
+			context.Setup(c => c.IsPromoted(name, ns)).Returns(true);
 
-			name =
-				"/*[local-name()='order' and namespace-uri()='urn:schemas.stateless.be:biztalk:system']/*[local-name()='id' and namespace-uri()='urn:schemas.stateless.be:biztalk:system']";
+			(name, ns) = (FileProperties.Password.Name, FileProperties.Password.Namespace);
+			context.Setup(c => c.ReadAt(2, out name, out ns)).Returns("p@ssw0rd");
+
+			(name, ns) = (new WCF.SharedAccessKey().Name.Name, new WCF.SharedAccessKey().Name.Namespace);
+			context.Setup(c => c.ReadAt(3, out name, out ns)).Returns("sh@r3d@cc3k3y");
+
+			(name, ns) = (new WCF.IssuerSecret().Name.Name, new WCF.IssuerSecret().Name.Namespace);
+			context.Setup(c => c.ReadAt(4, out name, out ns)).Returns("s3cr3t");
+
+			(name, ns) = (WcfProperties.HttpHeaders.Name, WcfProperties.HttpHeaders.Namespace);
+			context.Setup(c => c.ReadAt(5, out name, out ns)).Returns(httpHeaders);
+
+			name = "/*[local-name()='order' and namespace-uri()='urn:schemas.stateless.be:biztalk']/*[local-name()='id' and namespace-uri()='urn:schemas.stateless.be:biztalk']";
 			ns = "http://schemas.microsoft.com/BizTalk/2003/btsDistinguishedFields";
-			context
-				.Setup(c => c.ReadAt(3, out name, out ns))
-				.Returns("123456789");
+			context.Setup(c => c.ReadAt(6, out name, out ns)).Returns("123456789");
 
-			context
-				.Setup(c => c.CountProperties)
-				.Returns(4);
+			context.Setup(c => c.CountProperties).Returns(7);
 
-			const string expected =
-				@"<context xmlns:s0=""http://schemas.microsoft.com/BizTalk/2003/system-properties"" xmlns:s1=""http://schemas.microsoft.com/BizTalk/2003/btsDistinguishedFields"">"
-				+ @"<s0:p n=""OutboundTransportLocation"">file://c:\files\ports\out</s0:p>"
+			var redactedHttpHeaders = string.Join(
+				Environment.NewLine,
+				httpHeaders.Replace("Authorization: Bearer b3@r3r", string.Empty).Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
+
+			context.Object.ToXml().Should().Be(
+				@"<context xmlns:s0=""http://schemas.microsoft.com/BizTalk/2003/system-properties"" xmlns:s1=""http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties"" xmlns:s2=""http://schemas.microsoft.com/BizTalk/2003/btsDistinguishedFields"">"
+				+ @"<s0:p n=""OutboundTransportLocation"">file://c:\folder\ports\out</s0:p>"
 				+ @"<s0:p n=""OutboundTransportType"" promoted=""true"">FILE</s0:p>"
-				+ @"<s1:p n=""/*[local-name()='order' and namespace-uri()='urn:schemas.stateless.be:biztalk:system']/*[local-name()='id' and namespace-uri()='urn:schemas.stateless.be:biztalk:system']"">123456789</s1:p>"
-				+ @"</context>";
-			context.Object.ToXml().Should().Be(expected);
+				+ @"<s1:p n=""HttpHeaders"">" + redactedHttpHeaders + "</s1:p>"
+				+ @"<s2:p n=""/*[local-name()='order' and namespace-uri()='urn:schemas.stateless.be:biztalk']/*[local-name()='id' and namespace-uri()='urn:schemas.stateless.be:biztalk']"">123456789</s2:p>"
+				+ "</context>"
+			);
 
 			context.VerifyAll();
 		}
