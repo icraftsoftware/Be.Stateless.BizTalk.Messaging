@@ -331,17 +331,17 @@ namespace Be.Stateless.BizTalk.Unit.Message
 			message.Setup(m => m.Context.IsPromoted(BtsProperties.AckRequired)).Returns(true);
 			message.Setup(m => m.IsPromoted(BtsProperties.ActualRetryCount)).Returns(true);
 			message.Setup(m => m.Context.IsPromoted(BtsProperties.SendPortName)).Returns(true);
-			message.Setup(m => m.IsPromoted(BtsProperties.TransmitWorkId)).Returns(true);
+			message.Setup(m => m.IsPromoted(BtsProperties.TransmitWorkID)).Returns(true);
 
 			message.Object.IsPromoted(BtsProperties.AckRequired).Should().BeFalse();
 			message.Object.Context.IsPromoted(BtsProperties.ActualRetryCount).Should().BeFalse();
 			message.Object.Context.IsPromoted(BtsProperties.SendPortName).Should().BeFalse();
-			message.Object.IsPromoted(BtsProperties.TransmitWorkId).Should().BeFalse();
+			message.Object.IsPromoted(BtsProperties.TransmitWorkID).Should().BeFalse();
 
 			Invoking(() => message.Verify(m => m.IsPromoted(BtsProperties.AckRequired))).Should().Throw<MockException>();
 			Invoking(() => message.Verify(m => m.IsPromoted(BtsProperties.ActualRetryCount))).Should().Throw<MockException>();
 			Invoking(() => message.Verify(m => m.IsPromoted(BtsProperties.SendPortName))).Should().Throw<MockException>();
-			Invoking(() => message.Verify(m => m.IsPromoted(BtsProperties.TransmitWorkId))).Should().Throw<MockException>();
+			Invoking(() => message.Verify(m => m.IsPromoted(BtsProperties.TransmitWorkID))).Should().Throw<MockException>();
 		}
 
 		[Fact]
@@ -351,17 +351,17 @@ namespace Be.Stateless.BizTalk.Unit.Message
 			message.Setup(m => m.Context.Promote(BtsProperties.AckRequired, true));
 			message.Setup(m => m.Promote(BtsProperties.ActualRetryCount, 10));
 			message.Setup(m => m.Context.Promote(BtsProperties.SendPortName, "send-port-name"));
-			message.Setup(m => m.Promote(BtsProperties.TransmitWorkId, "work-id"));
+			message.Setup(m => m.Promote(BtsProperties.TransmitWorkID, "work-id"));
 
 			message.Object.IsPromoted(BtsProperties.AckRequired).Should().BeTrue();
 			message.Object.Context.IsPromoted(BtsProperties.ActualRetryCount).Should().BeTrue();
 			message.Object.Context.IsPromoted(BtsProperties.SendPortName).Should().BeTrue();
-			message.Object.IsPromoted(BtsProperties.TransmitWorkId).Should().BeTrue();
+			message.Object.IsPromoted(BtsProperties.TransmitWorkID).Should().BeTrue();
 
 			message.Verify(m => m.IsPromoted(BtsProperties.AckRequired));
 			message.Verify(m => m.IsPromoted(BtsProperties.ActualRetryCount));
 			message.Verify(m => m.IsPromoted(BtsProperties.SendPortName));
-			message.Verify(m => m.IsPromoted(BtsProperties.TransmitWorkId));
+			message.Verify(m => m.IsPromoted(BtsProperties.TransmitWorkID));
 		}
 
 		[Fact]

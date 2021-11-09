@@ -16,7 +16,6 @@
 
 #endregion
 
-using System;
 using Be.Stateless.BizTalk.ContextProperties;
 using FluentAssertions;
 using Microsoft.BizTalk.Message.Interop;
@@ -25,14 +24,10 @@ using Xunit;
 
 namespace Be.Stateless.BizTalk.Message.Extensions
 {
-	public class BaseMessageContextFixture
+	public class BaseMessageContextExtensionsFixture
 	{
-		[Theory]
-		[InlineData("Authorization: Bearer b3@r3r")]
-		[InlineData("Content-Type: application/xml\nAuthorization: Bearer b3@r3r\nAccept: application/xml")]
-		[InlineData("Content-Type: application/xml\rAuthorization: Bearer b3@r3r\rAccept: application/xml")]
-		[InlineData("Content-Type: application/xml\r\nAuthorization: Bearer b3@r3r\r\nAccept: application/xml")]
-		public void SerializeContextToXml(string httpHeaders)
+		[Fact]
+		public void SerializeContextToXml()
 		{
 			var context = new Mock<IBaseMessageContext>();
 
@@ -53,7 +48,10 @@ namespace Be.Stateless.BizTalk.Message.Extensions
 			context.Setup(c => c.ReadAt(4, out name, out ns)).Returns("s3cr3t");
 
 			(name, ns) = (WcfProperties.HttpHeaders.Name, WcfProperties.HttpHeaders.Namespace);
-			context.Setup(c => c.ReadAt(5, out name, out ns)).Returns(httpHeaders);
+			context.Setup(c => c.ReadAt(5, out name, out ns)).Returns(
+				@"Content-Type: application/xml
+Authorization: Bearer b3@r3r
+Accept: application/xml");
 
 			name = "/*[local-name()='order' and namespace-uri()='urn:schemas.stateless.be:biztalk']/*[local-name()='id' and namespace-uri()='urn:schemas.stateless.be:biztalk']";
 			ns = "http://schemas.microsoft.com/BizTalk/2003/btsDistinguishedFields";
@@ -61,15 +59,12 @@ namespace Be.Stateless.BizTalk.Message.Extensions
 
 			context.Setup(c => c.CountProperties).Returns(7);
 
-			var redactedHttpHeaders = string.Join(
-				Environment.NewLine,
-				httpHeaders.Replace("Authorization: Bearer b3@r3r", string.Empty).Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries));
-
 			context.Object.ToXml().Should().Be(
 				@"<context xmlns:s0=""http://schemas.microsoft.com/BizTalk/2003/system-properties"" xmlns:s1=""http://schemas.microsoft.com/BizTalk/2006/01/Adapters/WCF-properties"" xmlns:s2=""http://schemas.microsoft.com/BizTalk/2003/btsDistinguishedFields"">"
 				+ @"<s0:p n=""OutboundTransportLocation"">file://c:\folder\ports\out</s0:p>"
 				+ @"<s0:p n=""OutboundTransportType"" promoted=""true"">FILE</s0:p>"
-				+ @"<s1:p n=""HttpHeaders"">" + redactedHttpHeaders + "</s1:p>"
+				+ @"<s1:p n=""HttpHeaders"">Content-Type: application/xml
+Accept: application/xml</s1:p>"
 				+ @"<s2:p n=""/*[local-name()='order' and namespace-uri()='urn:schemas.stateless.be:biztalk']/*[local-name()='id' and namespace-uri()='urn:schemas.stateless.be:biztalk']"">123456789</s2:p>"
 				+ "</context>"
 			);

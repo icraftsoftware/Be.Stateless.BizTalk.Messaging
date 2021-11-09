@@ -28,7 +28,7 @@ using static FluentAssertions.FluentActions;
 
 namespace Be.Stateless.BizTalk.Message.Extensions
 {
-	public class BaseMessagePartFixture
+	public class BaseMessagePartExtensionsFixture
 	{
 		[Fact]
 		public void SetDataStream()
