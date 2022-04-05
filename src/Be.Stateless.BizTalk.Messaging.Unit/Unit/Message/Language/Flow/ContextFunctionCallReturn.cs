@@ -1,6 +1,6 @@
 ﻿#region Copyright & License
 
-// Copyright © 2012 - 2021 François Chabot
+// Copyright © 2012 - 2022 François Chabot
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -41,6 +41,104 @@ namespace Be.Stateless.BizTalk.Unit.Message.Language.Flow
 		public IThrowsResult Throws<TException>() where TException : Exception, new()
 		{
 			return _contextFunctionCallReturnImplementation.Throws<TException>();
+		}
+
+		public IThrowsResult Throws(Delegate exceptionFunction)
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<TException>(Func<TException> exceptionFunction) where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<T, TException>(Func<T, TException> exceptionFunction) where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<T1, T2, TException>(Func<T1, T2, TException> exceptionFunction) where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<T1, T2, T3, TException>(Func<T1, T2, T3, TException> exceptionFunction) where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<T1, T2, T3, T4, TException>(Func<T1, T2, T3, T4, TException> exceptionFunction) where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<T1, T2, T3, T4, T5, TException>(Func<T1, T2, T3, T4, T5, TException> exceptionFunction) where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, TException>(Func<T1, T2, T3, T4, T5, T6, TException> exceptionFunction) where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, TException>(Func<T1, T2, T3, T4, T5, T6, T7, TException> exceptionFunction) where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, TException>(Func<T1, T2, T3, T4, T5, T6, T7, T8, TException> exceptionFunction) where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, TException>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, TException> exceptionFunction)
+			where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TException>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TException> exceptionFunction)
+			where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TException>(Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TException> exceptionFunction)
+			where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TException>(
+			Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TException> exceptionFunction) where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TException>(
+			Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TException> exceptionFunction) where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TException>(
+			Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TException> exceptionFunction) where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TException>(
+			Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TException> exceptionFunction) where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
+		}
+
+		public IThrowsResult Throws<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TException>(
+			Func<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, TException> exceptionFunction) where TException : Exception
+		{
+			return _contextFunctionCallReturnImplementation.Throws(exceptionFunction);
 		}
 
 		public IReturnsResult<TMock> Returns(TResult value)
