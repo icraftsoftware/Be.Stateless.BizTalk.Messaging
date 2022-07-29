@@ -19,9 +19,9 @@
     <IsPackable>true</IsPackable>
     <PackageId>$(AssemblyName)</PackageId>
     <PackageDescription>$(Description)</PackageDescription>
-    <!--<PackageIconUrl>icon url prop</PackageIconUrl>-->
+    <PackageIconUrl>https://github.com/icraftsoftware/Be.Stateless.Build.Scripts/raw/master/nuget.png</PackageIconUrl>
+    <PackageIcon>nuget.png</PackageIcon>
     <PackageProjectUrl>$(RepositoryUrl)</PackageProjectUrl>
-    <!--<PackageReleaseNotes>release notes prop</PackageReleaseNotes>-->
     <PackageTags>BizTalk messaging library extension testing utility</PackageTags>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -33,13 +33,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\.build\nuget.png" Pack="true" PackagePath="" />
     <None Include="..\..\.settings\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Be.Stateless.BizTalk.Abstractions" Version="2.1.22046.40892" />
     <PackageReference Include="Be.Stateless.Extensions" Version="2.1.22025.20499" />
-    <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.3">
+    <PackageReference Include="BizTalk.Server.2020.Runtime" Version="1.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -48,7 +49,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-    <PackageReference Include="Moq" Version="4.17.2" />
+    <PackageReference Include="Moq" Version="4.18.1" />
   </ItemGroup>
 
   <ItemGroup>
